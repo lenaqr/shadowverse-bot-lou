@@ -21,18 +21,16 @@ client.on("message", async message => {
     let cards = await cardData.update();
     await message.channel.send(`Got ${cards.length} cards.`);
   } else if (command === "card") {
-    let queryWords = args.map(arg => arg.toLowerCase());
     let cards = await cardData.get();
-    let matches = cards.filter(card => {
-      if (card.card_name === null) return false;
-      let nameWords = card.card_name.toLowerCase().split(/ +/);
-      return queryWords.every(queryWord =>
-        nameWords.some(nameWord => nameWord.startsWith(queryWord))
-      );
-    });
-    await message.channel.send(
-      `Found ${matches.length} cards matching "${queryWords}".`
-    );
+    let card = cardData.find(cards, args);
+    if (card === null) {
+      await message.channel.send(`No cards matching "${args.join(" ")}".`);
+    } else {
+      console.log(card);
+      let embed = new Discord.MessageEmbed();
+      cardData.fillEmbed(embed, card);
+      await message.channel.send(embed);
+    }
   }
 });
 
