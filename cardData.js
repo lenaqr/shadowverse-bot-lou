@@ -91,7 +91,7 @@ const cardsets = {
   10017: "Fortune's Hand",
   10018: "Set 18",
   10019: "Set 19",
-  90000: "Token",
+  90000: "Token"
 };
 
 function fillEmbed(embed, card) {
