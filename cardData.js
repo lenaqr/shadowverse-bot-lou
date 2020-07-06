@@ -101,8 +101,13 @@ function fillEmbed(embed, card) {
   let cardtype = cardtypes[card.char_type - 1];
   let trait = card.tribe_name;
   let cardset = cardsets[card.card_set_id];
+  let description = [
+    `${cost}pp ${craft} ${rarity} ${cardtype}`,
+    `Trait: ${trait}`,
+    `Card Set: ${cardset}`
+  ].join("\n");
   embed.setTitle(card.card_name);
-  embed.setDescription(`${cost}pp ${craft} ${rarity} ${cardtype}\n${trait}`);
+  embed.setDescription(description);
   if (cardtype === "Follower") {
     let text = card.skill_disc.replace(/<br>/g, "\n");
     let evo_text = card.evo_skill_disc.replace(/<br>/g, "\n");
@@ -112,7 +117,6 @@ function fillEmbed(embed, card) {
     let text = card.skill_disc.replace(/<br>/g, "\n");
     embed.addField(cardtype, text);
   }
-  embed.addField("Set", cardset);
 }
 
 module.exports = { update, get, find, fillEmbed };
