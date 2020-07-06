@@ -102,7 +102,7 @@ function fillEmbed(embed, card) {
   let trait = card.tribe_name;
   let cardset = cardsets[card.card_set_id];
   embed.setTitle(card.card_name);
-  embed.setDescription(`${cost}pp ${craft} ${rarity} ${cardtype} | ${trait}`);
+  embed.setDescription(`${cost}pp ${craft} ${rarity} ${cardtype}\n${trait}`);
   if (cardtype === "Follower") {
     let text = card.skill_disc.replace(/<br>/g, "\n");
     let evo_text = card.evo_skill_disc.replace(/<br>/g, "\n");
