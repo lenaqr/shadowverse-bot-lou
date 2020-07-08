@@ -16,6 +16,9 @@ client.on("message", async message => {
 
   if (command === "ping") {
     await message.channel.send("Pong.");
+  } else if (command == "invite") {
+    let link = await client.generateInvite(["SEND_MESSAGES", "EMBED_LINKS"]);
+    await message.channel.send(link);
   } else if (command === "fetch") {
     await message.channel.send("Fetching card data...");
     let cards = await cardData.update();
