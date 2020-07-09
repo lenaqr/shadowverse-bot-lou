@@ -35,6 +35,15 @@ client.on("message", async message => {
       cardData.fillEmbed(embed, result);
       await message.channel.send(embed);
     }
+  } else if (command === "cards") {
+    let cards = await cardData.get();
+    let results = cardData.find(cards, args, 10);
+    if (results.length === 0) {
+      await message.channel.send(`No cards matching "${args.join(" ")}".`);
+    } else {
+      results = results.map(card => `${card.card_id}: ${card.card_name}`);
+      await message.channel.send(results.join("\n"));
+    }
   }
 });
 
