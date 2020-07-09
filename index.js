@@ -42,7 +42,7 @@ client.on("message", async message => {
       await message.channel.send(`No cards matching "${args.join(" ")}".`);
     } else {
       results = results.map(card => `${card.card_id}: ${card.card_name}`);
-      await message.channel.send(results.join("\n"));
+      await message.channel.send(`Found these cards:\n${results.join("\n")}`);
     }
   }
 });
