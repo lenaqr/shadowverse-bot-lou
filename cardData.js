@@ -42,9 +42,6 @@ function find(cards, queryWords, numResults) {
     score /= nameWords.length;
     if (isMatch) {
       results.push({ card, score });
-      if (results.length >= numResults * 2) {
-        results = results.sort((a, b) => b.score - a.score).slice(0, numResults);
-      }
     }
   });
   results = results.sort((a, b) => b.score - a.score).slice(0, numResults);
