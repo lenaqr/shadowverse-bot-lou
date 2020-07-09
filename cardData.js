@@ -21,10 +21,9 @@ async function get() {
   }
 }
 
-function find(cards, queryWords) {
+function find(cards, queryWords, numResults) {
+  let results = [];
   queryWords = queryWords.map(word => word.toLowerCase());
-  let best = null;
-  let bestScore = 0;
   cards.forEach(card => {
     if (card.card_name === null) return;
     let nameWords = card.card_name.toLowerCase().split(/ +/);
@@ -41,12 +40,15 @@ function find(cards, queryWords) {
       return false;
     });
     score /= nameWords.length;
-    if (isMatch && score > bestScore) {
-      best = card;
-      bestScore = score;
+    if (isMatch) {
+      results.push({ card, score });
+      if (results.length >= numResults * 2) {
+        results = results.sort((a, b) => b.score - a.score).slice(0, numResults);
+      }
     }
   });
-  return best;
+  results = results.sort((a, b) => b.score - a.score).slice(0, numResults);
+  return results.map(r => r.card);
 }
 
 const crafts = [

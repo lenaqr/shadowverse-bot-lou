@@ -25,13 +25,14 @@ client.on("message", async message => {
     await message.channel.send(`Got ${cards.length} cards.`);
   } else if (command === "card") {
     let cards = await cardData.get();
-    let card = cardData.find(cards, args);
-    if (card === null) {
+    let results = cardData.find(cards, args, 1);
+    if (results.length === 0) {
       await message.channel.send(`No cards matching "${args.join(" ")}".`);
     } else {
-      console.log(card);
+      let result = results[0];
+      console.log(result);
       let embed = new Discord.MessageEmbed();
-      cardData.fillEmbed(embed, card);
+      cardData.fillEmbed(embed, result);
       await message.channel.send(embed);
     }
   }
