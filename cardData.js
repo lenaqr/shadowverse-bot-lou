@@ -23,6 +23,11 @@ async function get() {
 
 function find(cards, queryWords, numResults) {
   let results = [];
+  if (queryWords.length === 1 && !isNaN(queryWords[0])) {
+    // search by ID
+    let id = +queryWords[0];
+    return cards.filter(card => id === card.card_id);
+  }
   queryWords = queryWords.map(word => word.toLowerCase());
   cards.forEach(card => {
     if (card.card_name === null) return;
