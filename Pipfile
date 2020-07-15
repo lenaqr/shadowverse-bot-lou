@@ -4,10 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+black = "*"
 
 [packages]
 "discord.py" = "*"
 aiohttp = "*"
+unitypack = {git = "https://github.com/HearthSim/UnityPack"}
 
 [requires]
 python_version = "3.8"

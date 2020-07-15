@@ -19,7 +19,7 @@ async def get() -> list:
     return _cache
 
 
-def find(cards: list, query: str, *, num_results: int):
+def find(cards: list, query: str, *, num_results: int) -> list:
     if query.isdigit():
         card_id = int(query)
         return [card for card in cards if card["card_id"] == card_id]
@@ -90,7 +90,7 @@ card_sets = {
 }
 
 
-def create_embed(card: dict):
+def create_embed(card: dict) -> dict:
     card_type = card_types[card["char_type"]]
     title = card["card_name"]
     description = (
