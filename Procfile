@@ -1,2 +1,2 @@
 web: echo "no web process"
-worker: npm start
+worker: python main.py
