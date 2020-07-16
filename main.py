@@ -16,12 +16,9 @@ async def on_ready():
 
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send("pong")
-
-
-@bot.command()
 async def invite(ctx):
+    """Generate a link to invite me to your server"""
+
     app_info = await bot.application_info()
     link = f"https://discord.com/api/oauth2/authorize?client_id={app_info.id}&permissions=18432&scope=bot"
     await ctx.send(f"Invite me to your server: <{link}>")
@@ -29,6 +26,8 @@ async def invite(ctx):
 
 @bot.command()
 async def card(ctx, *, query: str):
+    """Display a card's stats and text"""
+
     async with ctx.typing():
         cards = await card_data.get()
     results = card_data.find(cards, query, num_results=1)
@@ -42,6 +41,8 @@ async def card(ctx, *, query: str):
 
 @bot.command()
 async def cards(ctx, *, query: str):
+    """List all matching cards"""
+
     async with ctx.typing():
         cards = await card_data.get()
     results = card_data.find(cards, query, num_results=10)
@@ -56,6 +57,8 @@ async def cards(ctx, *, query: str):
 
 @bot.command()
 async def art(ctx, *, query: str):
+    """Display a card's full art"""
+
     async with ctx.typing():
         cards = await card_data.get()
 
