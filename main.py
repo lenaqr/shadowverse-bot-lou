@@ -55,9 +55,8 @@ async def cards(ctx, *, query: str):
         )
 
 
-@bot.command()
-async def art(ctx, *, query: str):
-    """Display a card's full art"""
+async def art_gen(ctx, query: str, which: str):
+    """Helper function for art commands"""
 
     async with ctx.typing():
         cards = await card_data.get()
@@ -70,12 +69,26 @@ async def art(ctx, *, query: str):
     card_name = result["card_name"]
 
     async with ctx.typing():
-        image = await card_art.get_asset(result["card_id"])
+        image = await card_art.get_asset(result["card_id"], which)
 
     if image is None:
         await ctx.send(f'Failed to get card art for "{card_name}"')
     else:
         await ctx.send(card_name, file=discord.File(image, "0.png"))
+
+
+@bot.command()
+async def art(ctx, *, query: str):
+    """Display a card's base art"""
+
+    await art_gen(ctx, query, "0")
+
+
+@bot.command()
+async def evoart(ctx, *, query: str):
+    """Display a card's evolved art"""
+
+    await art_gen(ctx, query, "1")
 
 
 bot.run(os.environ["DISCORD_TOKEN"])

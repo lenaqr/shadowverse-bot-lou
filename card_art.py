@@ -45,7 +45,7 @@ async def get_assetmanifest() -> dict:
     return ret
 
 
-async def get_asset(card_id: int) -> io.BytesIO:
+async def get_asset(card_id: int, suffix: str) -> io.BytesIO:
     data = _asset_cache.get(card_id)
 
     if data is None:
@@ -70,8 +70,11 @@ async def get_asset(card_id: int) -> io.BytesIO:
             if obj.type == "Texture2D":
                 d = obj.read()
                 i = d.image
-                if d.name.endswith("0") and d.width == d.height == 1024:
+                if d.name.endswith(suffix) and d.width == d.height == 1024:
                     image = d.image
+                    break
+        if image is not None:
+            break
 
     if image is None:
         return None
