@@ -55,8 +55,8 @@ async def card(ctx, *, query: str):
         await ctx.send(embed=embed)
 
 
-@bot.command()
-async def flavor(ctx, *, query: str):
+@bot.command(aliases=["flavor", "flair", "text"])
+async def flavortext(ctx, *, query: str):
     """Display a card's flavortext"""
 
     async with ctx.typing():
@@ -92,14 +92,14 @@ async def art_gen(ctx, query: str, which: str):
         await ctx.send(card_name, file=discord.File(image, "0.png"))
 
 
-@bot.command()
+@bot.command(aliases=["img"])
 async def art(ctx, *, query: str):
     """Display a card's base art"""
 
     await art_gen(ctx, query, "0")
 
 
-@bot.command()
+@bot.command(aliases=["evoimg"])
 async def evoart(ctx, *, query: str):
     """Display a card's evolved art"""
 
