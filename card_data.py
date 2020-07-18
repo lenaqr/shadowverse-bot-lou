@@ -90,20 +90,15 @@ card_sets = {
 }
 
 
-def create_embed(card: dict) -> dict:
+def info_embed(card: dict) -> dict:
     card_type = card_types[card["char_type"]]
     title = card["card_name"]
-    description = (
-        "{cost}pp {craft} {rarity} {card_type}\n"
-        "Trait: {trait}\n"
-        "Card Set: {card_set}"
-    ).format(
+    description = ("{cost}pp {craft} {rarity} {card_type}\nTrait: {trait}").format(
         cost=card["cost"],
         craft=crafts[card["clan"]],
         rarity=rarities[card["rarity"]],
         card_type=card_type,
         trait=card["tribe_name"],
-        card_set=card_sets[card["card_set_id"]],
     )
     if card_type == "Follower":
         base_text = card["skill_disc"].replace("<br>", "\n")
@@ -116,5 +111,23 @@ def create_embed(card: dict) -> dict:
         ]
     else:
         text = card["skill_disc"].replace("<br>", "\n")
+        fields = [dict(name=card_type, value=text)]
+    return dict(title=title, description=description, fields=fields)
+
+
+def flavor_embed(card: dict) -> dict:
+    card_type = card_types[card["char_type"]]
+    card_set = card_sets[card["card_set_id"]]
+    title = card["card_name"]
+    description = f"Card Set: {card_set}"
+    if card_type == "Follower":
+        base_text = card["description"].replace("<br>", "\n")
+        evo_text = card["evo_description"].replace("<br>", "\n")
+        fields = [
+            dict(name="Base", value=base_text),
+            dict(name="Evolved", value=evo_text),
+        ]
+    else:
+        text = card["description"].replace("<br>", "\n")
         fields = [dict(name=card_type, value=text)]
     return dict(title=title, description=description, fields=fields)
