@@ -90,6 +90,15 @@ card_sets = {
 }
 
 
+def reformat_text(text: str) -> str:
+    return (
+        text.replace("<br>", "\n")
+        .replace("[/b][b]", "")
+        .replace("[b]", "**")
+        .replace("[/b]", "**")
+    )
+
+
 def info_embed(card: dict) -> dict:
     card_type = card_types[card["char_type"]]
     title = card["card_name"]
@@ -101,8 +110,8 @@ def info_embed(card: dict) -> dict:
         trait=card["tribe_name"],
     )
     if card_type == "Follower":
-        base_text = card["skill_disc"].replace("<br>", "\n")
-        evo_text = card["evo_skill_disc"].replace("<br>", "\n")
+        base_text = reformat_text(card["org_skill_disc"])
+        evo_text = reformat_text(card["org_evo_skill_disc"])
         fields = [
             dict(name="Base", value="{atk}/{life}\n".format(**card) + base_text),
             dict(
@@ -110,7 +119,7 @@ def info_embed(card: dict) -> dict:
             ),
         ]
     else:
-        text = card["skill_disc"].replace("<br>", "\n")
+        text = reformat_text(card["org_skill_disc"])
         fields = [dict(name=card_type, value=text)]
     return dict(title=title, description=description, fields=fields)
 
