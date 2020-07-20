@@ -31,12 +31,20 @@ def find(cards: list, query: str, *, num_results: int) -> list:
         if card_name is None:
             continue
         name_words = card_name.lower().split()
+        extra_words = [
+            "{}pp".format(card["cost"]),
+            crafts[card["clan"]].lower(),
+            rarities[card["rarity"]].lower(),
+            card_types[card["char_type"]].lower(),
+        ]
         score = 0
         is_match = True
         for query_word in query_words:
             if query_word in name_words:
                 score += 3
             elif any(name_word.startswith(query_word) for name_word in name_words):
+                score += 1
+            elif query_word in extra_words:
                 score += 1
             else:
                 is_match = False
