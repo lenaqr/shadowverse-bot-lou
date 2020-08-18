@@ -25,6 +25,7 @@ def find(cards: list, query: str, *, num_results: int) -> list:
         return [card for card in cards if card["card_id"] == card_id]
 
     results = []
+    query = query.replace("’", "'")
     query_words = query.lower().split()
     for i, card in enumerate(cards):
         card_name = card["card_name"]
