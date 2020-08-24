@@ -3,92 +3,6 @@ import difflib
 import aiohttp
 
 
-_cache = None
-
-
-async def update():
-    global _cache
-    url = "https://shadowverse-portal.com/api/v1/cards?format=json&lang=en"
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            json = await response.json()
-    _cache = json["data"]["cards"]
-
-
-async def get() -> list:
-    if _cache is None:
-        await update()
-    return _cache
-
-
-def effective_card_name(card: dict):
-    card_name = card["card_name"]
-    if card_name is None:
-        return None
-    if card["card_id"] != card["base_card_id"]:
-        card_set = card_sets[card["card_set_id"]]
-        return card_name + f" (Alt: {card_set})"
-    return card_name
-
-
-def find(cards: list, query: str, *, num_results: int) -> list:
-    results = []
-    query_words = query.lower().split()
-    for i, card in enumerate(cards):
-        card_name = effective_card_name(card)
-        if card_name is None:
-            continue
-        if query.islower():
-            card_name = card_name.lower()
-        if query == card_name:
-            is_exact = True
-            match_size = len(query)
-            match_cost = len(query)
-        else:
-            # iterate over blocks of matching characters as returned by
-            # difflib, to get
-            # - "match_size", the number of matching characters
-            # - "match_cost", the number of edit operations from the card name
-            #   to the search query
-            is_exact = False
-            s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
-            blocks = s.get_matching_blocks()
-            match_size = 0
-            match_cost = len(query)
-            pos = 0
-            for block in blocks:
-                # we matched `block.size` characters and we skipped over the
-                # substring `card_name[pos : block.b]`
-                match_size += block.size
-                num_unmatched_words = len(card_name[pos : block.b].split())
-                if block.b < len(card_name):
-                    # cost 1 per word in the skipped substring
-                    match_cost += num_unmatched_words
-                else:
-                    # special case: we skipped over the whole rest of the
-                    # string. cost 1 to skip the rest, plus 1 to skip to the
-                    # end of the current word if we were in the middle of one.
-                    if num_unmatched_words > 0:
-                        match_cost += 1
-                    if (
-                        num_unmatched_words > 1
-                        and pos < len(card_name)
-                        and not card_name[pos].isspace()
-                        and not card_name[pos] == ","
-                    ):
-                        match_cost += 1
-                # set `pos` to the end of the matching block
-                pos = block.b + block.size
-            # difflib always produces a dummy block at the end.
-            assert pos == len(card_name)
-        card_id = card["card_id"]
-        is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
-        key = (-is_exact, -match_size / match_cost, is_alt_or_token, -card_id)
-        results.append((key, i))
-    results.sort()
-    return [cards[i] for (_, i) in results[:num_results]]
-
-
 crafts = [
     "Neutral",
     "Forestcraft",
@@ -148,7 +62,97 @@ card_sets = {
 }
 
 
+_cache = None
+
+
+async def _update():
+    global _cache
+    url = "https://shadowverse-portal.com/api/v1/cards?format=json&lang=en"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            json = await response.json()
+    _cache = json["data"]["cards"]
+
+
+async def get() -> list:
+    """Get card info from shadowverse-portal."""
+    if _cache is None:
+        await _update()
+    return _cache
+
+
+def effective_card_name(card: dict) -> str:
+    """Get the effective name of a card."""
+    card_name = card["card_name"]
+    if card_name is None:
+        return None
+    if card["card_id"] != card["base_card_id"]:
+        card_set = card_sets[card["card_set_id"]]
+        return card_name + f" (Alt: {card_set})"
+    return card_name
+
+
+def find(cards: list, query: str, *, num_results: int) -> list:
+    """Find cards whose names match the query string."""
+    results = []
+    query_words = query.lower().split()
+    for i, card in enumerate(cards):
+        card_name = effective_card_name(card)
+        if card_name is None:
+            continue
+        if query.islower():
+            card_name = card_name.lower()
+        if query == card_name:
+            is_exact = True
+            match_size = len(query)
+            match_cost = len(query)
+        else:
+            # iterate over blocks of matching characters as returned by
+            # difflib, to get
+            # - "match_size", the number of matching characters
+            # - "match_cost", the number of edit operations from the card name
+            #   to the search query
+            is_exact = False
+            s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
+            blocks = s.get_matching_blocks()
+            match_size = 0
+            match_cost = len(query)
+            pos = 0
+            for block in blocks:
+                # we matched `block.size` characters and we skipped over the
+                # substring `card_name[pos : block.b]`
+                match_size += block.size
+                num_unmatched_words = len(card_name[pos : block.b].split())
+                if block.b < len(card_name):
+                    # cost 1 per word in the skipped substring
+                    match_cost += num_unmatched_words
+                else:
+                    # special case: we skipped over the whole rest of the
+                    # string. cost 1 to skip the rest, plus 1 to skip to the
+                    # end of the current word if we were in the middle of one.
+                    if num_unmatched_words > 0:
+                        match_cost += 1
+                    if (
+                        num_unmatched_words > 1
+                        and pos < len(card_name)
+                        and not card_name[pos].isspace()
+                        and not card_name[pos] == ","
+                    ):
+                        match_cost += 1
+                # set `pos` to the end of the matching block
+                pos = block.b + block.size
+            # difflib always produces a dummy block at the end.
+            assert pos == len(card_name)
+        card_id = card["card_id"]
+        is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
+        key = (-is_exact, -match_size / match_cost, is_alt_or_token, -card_id)
+        results.append((key, i))
+    results.sort()
+    return [cards[i] for (_, i) in results[:num_results]]
+
+
 def reformat_text(text: str) -> str:
+    """Replace shadowverse-portal's formatting markup with markdown."""
     return (
         text.replace("<br>", "\n")
         .replace("[/b][b]", "")
@@ -158,6 +162,7 @@ def reformat_text(text: str) -> str:
 
 
 def info_embed(card: dict) -> dict:
+    """Generate an embed for a card's info."""
     card_type = card_types[card["char_type"]]
     title = effective_card_name(card)
     description = (
@@ -188,6 +193,7 @@ def info_embed(card: dict) -> dict:
 
 
 def flavor_embed(card: dict) -> dict:
+    """Generate an embed for a card's flavortext."""
     card_type = card_types[card["char_type"]]
     card_set = card_sets[card["card_set_id"]]
     title = effective_card_name(card)
@@ -206,6 +212,7 @@ def flavor_embed(card: dict) -> dict:
 
 
 def eggsplosion_card(cards: list) -> str:
+    """Return the name of a random card with 3 or less defense."""
     cards = [
         card
         for card in cards
