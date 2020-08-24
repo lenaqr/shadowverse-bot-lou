@@ -14,7 +14,12 @@ crafts = [
     "Havencraft",
     "Portalcraft",
 ]
-rarities = {1: "Bronze", 2: "Silver", 3: "Gold", 4: "Legendary"}
+rarities = {
+    1: "Bronze",
+    2: "Silver",
+    3: "Gold",
+    4: "Legendary",
+}
 card_types = {
     1: "Follower",
     2: "Amulet",  # permanent
@@ -175,7 +180,7 @@ def info_embed(card: dict) -> dict:
         rarity=rarities[card["rarity"]],
         card_type=card_type,
         trait=card["tribe_name"],
-        card_set=card_sets[card["card_set_id"]]
+        card_set=card_sets[card["card_set_id"]],
     )
     if card_type == "Follower":
         base_text = reformat_text(card["org_skill_disc"])
