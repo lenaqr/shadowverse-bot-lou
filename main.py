@@ -106,4 +106,22 @@ async def evoart(ctx, *, query: str):
     await art_gen(ctx, query, "1")
 
 
+@bot.command(aliases=["bugreport", "bug", "report"])
+async def feedback(ctx, *, message: str):
+    """Report feedback to the bot dev"""
+
+    log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
+    await log_channel.send(
+        f"Feedback from {ctx.author} in {ctx.guild} {ctx.channel}: ```{message}```"
+    )
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
+    await log_channel.send(
+        f"Error from {ctx.author} in {ctx.guild} {ctx.channel}: ```{error}```"
+    )
+
+
 bot.run(os.environ["DISCORD_TOKEN"])
