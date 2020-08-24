@@ -160,12 +160,17 @@ def reformat_text(text: str) -> str:
 def info_embed(card: dict) -> dict:
     card_type = card_types[card["char_type"]]
     title = effective_card_name(card)
-    description = ("{cost}pp {craft} {rarity} {card_type}\nTrait: {trait}").format(
+    description = (
+        "{cost}pp {craft} {rarity} {card_type}\n"
+        "Trait: {trait}\n"
+        "Card Set: {card_set}"
+    ).format(
         cost=card["cost"],
         craft=crafts[card["clan"]],
         rarity=rarities[card["rarity"]],
         card_type=card_type,
         trait=card["tribe_name"],
+        card_set=card_sets[card["card_set_id"]]
     )
     if card_type == "Follower":
         base_text = reformat_text(card["org_skill_disc"])
