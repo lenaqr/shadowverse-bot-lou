@@ -21,15 +21,21 @@ async def get() -> list:
     return _cache
 
 
-def find(cards: list, query: str, *, num_results: int) -> list:
-    if query.isdigit():
-        card_id = int(query)
-        return [card for card in cards if card["card_id"] == card_id]
+def effective_card_name(card: dict):
+    card_name = card["card_name"]
+    if card_name is None:
+        return None
+    if card["card_id"] != card["base_card_id"]:
+        card_set = card_sets[card["card_set_id"]]
+        return card_name + f" (Alt: {card_set})"
+    return card_name
 
+
+def find(cards: list, query: str, *, num_results: int) -> list:
     results = []
     query_words = query.lower().split()
     for i, card in enumerate(cards):
-        card_name = card["card_name"]
+        card_name = effective_card_name(card)
         if card_name is None:
             continue
         if query.islower():
@@ -153,7 +159,7 @@ def reformat_text(text: str) -> str:
 
 def info_embed(card: dict) -> dict:
     card_type = card_types[card["char_type"]]
-    title = card["card_name"]
+    title = effective_card_name(card)
     description = ("{cost}pp {craft} {rarity} {card_type}\nTrait: {trait}").format(
         cost=card["cost"],
         craft=crafts[card["clan"]],
@@ -179,7 +185,7 @@ def info_embed(card: dict) -> dict:
 def flavor_embed(card: dict) -> dict:
     card_type = card_types[card["char_type"]]
     card_set = card_sets[card["card_set_id"]]
-    title = card["card_name"]
+    title = effective_card_name(card)
     description = f"Card Set: {card_set}"
     if card_type == "Follower":
         base_text = card["description"].replace("<br>", "\n")

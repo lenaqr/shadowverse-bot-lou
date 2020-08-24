@@ -36,7 +36,7 @@ async def cards(ctx, *, query: str):
     else:
         await ctx.send(
             "Found these cards:\n"
-            + "\n".join("{card_id}: {card_name}".format(**card) for card in results)
+            + "\n".join(card_data.effective_card_name(card) for card in results)
         )
 
 
@@ -81,7 +81,7 @@ async def art_gen(ctx, query: str, which: str):
         await ctx.send(f'Found no cards matching "{query}"')
         return
     [result] = results
-    card_name = result["card_name"]
+    card_name = card_data.effective_card_name(result)
 
     async with ctx.typing():
         image = await card_art.get_asset(result["card_id"], which)
