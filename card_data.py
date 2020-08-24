@@ -82,7 +82,7 @@ def find(cards: list, query: str, *, num_results: int) -> list:
             # difflib always produces a dummy block at the end.
             assert pos == len(card_name)
         card_id = card["card_id"]
-        is_alt_or_token = card_id >= 700000000
+        is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
         key = (-is_exact, -match_size / match_cost, is_alt_or_token, -card_id)
         results.append((key, i))
     results.sort()
