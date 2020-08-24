@@ -16,63 +16,67 @@ def find(cards, query, num_results):
 
 
 def test_bellr(cards):
-    assert find(cards, "bellr", 5) == ["Bellringer Angel", "Shining Bellringer Angel"]
+    assert find(cards, "bellr", 1) == [
+        "Bellringer Angel",
+    ]
 
 
 def test_medusa(cards):
-    assert find(cards, "medusa", 5) == [
+    assert find(cards, "medusa", 6) == [
         "Medusa",
-        "Venomfang Medusa",
-        "Venomfang Medusa",
+        "Medusa, Evil-Eyed Serpent",
         "Sweet-Tooth Medusa",
+        "Venomfang Medusa",
+        "Venomfang Medusa",
         "Medusa's Gaze",
     ]
 
 
 def test_ladica(cards):
-    assert find(cards, "ladica", 5) == [
+    assert find(cards, "ladica", 2) == [
+        "Ladica, the Stoneclaw",
         "Ladica's Embrace",
-        "Ladica, the Stoneclaw",
-    ]
-    assert find(cards, "ladica,", 5) == [
-        "Ladica, the Stoneclaw",
     ]
 
 
 def test_tetra(cards):
-    assert find(cards, "tetra", 5) == [
-        "Tetra's Mettle",
+    assert find(cards, "tetra", 2) == [
         "Tetra, Sapphire Rebel",
+        "Tetra's Mettle",
     ]
 
 
 def test_mono(cards):
-    assert find(cards, "mono", 5) == [
+    assert find(cards, "mono", 1) == [
+        "Mono, Garnet Rebel",
+    ]
+    assert find(cards, "mono's", 1) == [
         "Mono's Resolve",
-        "Mono, Garnet Rebel",
-        "Mono, Garnet Rebel",
     ]
 
 
 def test_resolve(cards):
     assert find(cards, "resolve", 5) == [
-        "Mono's Resolve",
-        "Intertwined Resolve",
-        "Leonidas's Resolve",
         "Resolve of the Fallen",
+        "Intertwined Resolve",
+        "Mono's Resolve",
+        "Leonidas's Resolve",
+        "Gelt, Resolute Knight",
     ]
 
 
 def test_prophetess(cards):
     assert find(cards, "prophetess", 5) == [
-        "Elf Prophetess",
         "Prophetess of Creation",
+        "Elf Prophetess",
         "Teo, Prophetess of Creation",
+        "Protectoress",
+        "Prism Priestess",
     ]
 
 
 def test_lapis(cards):
-    assert find(cards, "lapis", 5) == [
+    assert find(cards, "lapis", 3) == [
         "Lapis, Glorious Seraph",
         "Lapis, Glorious Seraph",
         "Seraph Lapis, Glory Be",
@@ -80,83 +84,100 @@ def test_lapis(cards):
 
 
 def test_elana(cards):
-    assert find(cards, "elana", 5) == [
-        "Elana's Prayer",
+    assert find(cards, "elana", 2) == [
         "Elana, Purest Prayer",
+        "Elana's Prayer",
     ]
 
 
 def test_lococo(cards):
-    assert find(cards, "elana", 5) == ["Elana's Prayer", "Elana, Purest Prayer"]
+    assert find(cards, "lococo", 2) == [
+        "Lococo, Little Puppeteer",
+        "Lococo's Teddy Bear",
+    ]
 
 
 def test_robomi(cards):
-    assert find(cards, "robomi", 5) == ["Go, Go, Robomi!", "Robomi, Steel Warrior"]
+    assert find(cards, "robomi", 3) == [
+        "Robomi, Steel Warrior",
+        "Robozombie",
+        "Go, Go, Robomi!",
+    ]
 
 
 def test_alyaska(cards):
-    assert find(cards, "alyaska", 5) == [
+    assert find(cards, "alyaska", 2) == [
         "Alyaska, War Hawker",
         "Alyaska, Master Dealer",
     ]
 
 
 def test_runie(cards):
-    assert find(cards, "runie", 5) == [
+    assert find(cards, "runie", 2) == [
         "Runie, Resolute Diviner",
         "Runie, Destiny's Bard",
     ]
 
 
 def test_neph(cards):
-    assert find(cards, "neph", 5) == [
+    assert find(cards, "neph", 3) == [
         "Nephthys",
         "Nephthys",
+        "Nephthys, Goddess of Amenta",
+    ]
+    assert find(cards, "neph,", 1) == [
         "Nephthys, Goddess of Amenta",
     ]
 
 
 def test_arriet(cards):
-    assert find(cards, "arriet", 5) == ["Luxblade Arriet", "Arriet, Soothing Harpist"]
+    assert find(cards, "arriet", 2) == [
+        "Luxblade Arriet",
+        "Arriet, Soothing Harpist",
+    ]
+    assert find(cards, "arriet,", 1) == [
+        "Arriet, Soothing Harpist",
+    ]
 
 
 def test_otohime(cards):
     assert find(cards, "otohime", 5) == [
-        "Sea Queen Otohime",
-        "Sea Queen Otohime",
         "Dragon Empress Otohime",
-        "Otohime's Bodyguard",
+        "Sea Queen Otohime",
         "Otohime's Vanguard",
+        "Otohime's Bodyguard",
+        "Sea Queen Otohime",
     ]
 
 
 def test_ines(cards):
-    assert find(cards, "ines", 5) == ["Ines, Maiden of Clouds"]
+    assert find(cards, "ines", 1) == [
+        "Ines, Maiden of Clouds",
+    ]
 
 
 def test_ameth(cards):
-    assert find(cards, "ameth", 5) == [
-        "Amethyst Giant",
+    assert find(cards, "ameth", 2) == [
         "Ameth, Dream Emissary",
-        "Aenea, Amethyst Rebel",
-        "Aenea, Amethyst Rebel",
+        "Amethyst Giant",
     ]
 
 
 def test_hades(cards):
-    assert find(cards, "hades", 5) == [
-        "Cerberus, Hound of Hades",
-        "Hades, Father of Purgatory",
+    assert find(cards, "hades", 1) == [
         "Hades, Father of Purgatory",
     ]
 
 
 def test_steadfast(cards):
-    assert find(cards, "steadfast", 5) == ["Steadfast Angel", "Steadfast Samurai"]
+    assert find(cards, "steadfast", 2) == [
+        "Steadfast Samurai",
+        "Steadfast Angel",
+    ]
 
 
 def test_stalwart(cards):
-    assert find(cards, "stalwart", 5) == [
+    assert find(cards, "stalwart", 4) == [
         "Stalwart Featherfolk",
         "Aquascale Stalwart",
         "Jeno, Levin Stalwart",
@@ -165,150 +186,142 @@ def test_stalwart(cards):
 
 
 def test_shin(cards):
-    assert find(cards, "shin", 5) == [
+    assert find(cards, "shin", 3) == [
         "Shin, Lawful Light",
-        "Shining Bellringer Angel",
-        "Shinobu, Mausoleum Medium",
         "Shin, Chaotic Darkness",
+        "Shinobu, Mausoleum Medium",
     ]
 
 
 def test_lina(cards):
-    assert find(cards, "lina", 5) == ["Lina & Lena, Twin Souls"]
+    assert find(cards, "lina", 1) == [
+        "Lina & Lena, Twin Souls",
+    ]
 
 
 def test_ra(cards):
-    assert find(cards, "ra", 5) == [
-        "Rapunzel",
-        "Rahab",
-        "Meowskers's Raid",
-        "Rapier Master",
-        "Flame Rat",
+    assert find(cards, "ra", 1) == [
+        "Ra, Radiance Incarnate",
     ]
 
 
 def test_shion(cards):
-    assert find(cards, "shion", 5) == [
+    assert find(cards, "shion", 1) == [
         "Shion, Mercurial Aegis",
     ]
 
 
 def test_elf_queen(cards):
-    assert find(cards, "elf queen abundant life", 5) == ["Elf Queen of Abundant Life"]
+    assert find(cards, "elf queen abundant life", 1) == ["Elf Queen of Abundant Life"]
 
 
 def test_rebel_fate(cards):
-    assert find(cards, "rebel fate", 5) == ["Rebel Against Fate"]
+    assert find(cards, "rebel fate", 1) == ["Rebel Against Fate"]
 
 
 def test_xi(cards):
-    assert find(cards, "XI.", 5) == ["XI. Erntz, Justice"]
+    assert find(cards, "XI.", 1) == ["XI. Erntz, Justice"]
 
 
 def test_dragonflute(cards):
-    assert find(cards, "dragonflute", 5) == []
+    assert find(cards, "dragonflute", 1) == ["Dragonsong Flute"]
 
 
 def test_dragonkeeper(cards):
-    assert find(cards, "prime dragonkeeper", 5) == []
+    assert find(cards, "prime dragonkeeper", 1) == ["Prime Dragon Keeper"]
 
 
 def test_demon_lord(cards):
-    assert find(cards, "demon lord", 5) == []
+    assert find(cards, "demon lord", 1) == ["Demonlord Eachtar "]
 
 
 def test_ignorance(cards):
-    assert find(cards, "rite of ignorance", 5) == []
+    assert find(cards, "rite of ignorance", 1) == ["Rite of the Ignorant"]
 
 
 def test_demon_eachtar(cards):
-    assert find(cards, "demon eachtar", 5) == ["Demonlord Eachtar "]
+    assert find(cards, "demon eachtar", 1) == ["Demonlord Eachtar "]
 
 
 def test_heavens_gate(cards):
-    assert find(cards, "heaven’s gate", 5) == ["Heaven's Gate"]
-    assert find(cards, "heavens gate", 5) == []
+    assert find(cards, "heaven’s gate", 1) == ["Heaven's Gate"]
+    assert find(cards, "heavens gate", 1) == ["Heaven's Gate"]
 
 
 def test_themis_decree(cards):
-    assert find(cards, "themis decree", 5) == ["Themis's Decree"]
+    assert find(cards, "themis decree", 1) == ["Themis's Decree"]
 
 
 def test_tetra_met(cards):
-    assert find(cards, "tetra met", 5) == ["Tetra's Mettle"]
+    assert find(cards, "tetra met", 1) == ["Tetra's Mettle"]
 
 
 def test_dis_damnation(cards):
-    assert find(cards, "dis damnation", 5) == ["Dis's Damnation"]
+    assert find(cards, "dis damnation", 1) == ["Dis's Damnation"]
 
 
 def test_death_mist(cards):
-    assert find(cards, "death mist", 5) == ["Death's Mistress"]
+    assert find(cards, "death mist", 1) == ["Death's Mistress"]
 
 
 def test_arcus_ghostly(cards):
-    assert find(cards, "arcus ghostly", 5) == ["Arcus, Ghostly Manager"]
+    assert find(cards, "arcus ghostly", 1) == ["Arcus, Ghostly Manager"]
 
 
 def test_awaken_gaia(cards):
-    assert find(cards, "awaken gaia", 5) == ["Awakened Gaia"]
+    assert find(cards, "awaken gaia", 1) == ["Awakened Gaia"]
 
 
 def test_liberte(cards):
-    assert find(cards, "liberte", 5) == []
+    assert find(cards, "liberte", 1) == ["Liberté, Werewolf Pup"]
 
 
 def test_terminus_weap(cards):
-    assert find(cards, "terminus weap", 5) == []
+    assert find(cards, "terminus weap", 1) == ["Exterminus Weapon"]
 
 
 def test_eggsplotion(cards):
-    assert find(cards, "eggsplotion", 5) == []
+    assert find(cards, "eggsplotion", 1) == ["Eggsplosion"]
 
 
 def test_nepthys(cards):
-    assert find(cards, "nepthys", 5) == []
+    assert find(cards, "nepthys", 1) == ["Nephthys"]
 
 
 def test_weilder(cards):
-    assert find(cards, "chaos weilder", 5) == []
-
-
-def test_lucoco(cards):
-    assert find(cards, "lucoco", 5) == []
+    assert find(cards, "chaos weilder", 1) == ["Chaos Wielder"]
 
 
 def test_weaponary(cards):
-    assert find(cards, "forged weaponary", 5) == []
+    assert find(cards, "forged weaponary", 1) == ["Forge Weaponry"]
 
 
 def test_vortex(cards):
-    assert find(cards, "vortex colony", 5) == []
+    assert find(cards, "vortex colony", 1) == ["Vertex Colony"]
 
 
 def test_radient(cards):
-    assert find(cards, "ra, radient", 5) == []
-
-
-def test_shudderwock(cards):
-    assert find(cards, "shudderwock", 5) == []
+    assert find(cards, "ra, radient", 1) == ["Ra, Radiance Incarnate"]
 
 
 def test_ironstinger(cards):
-    assert find(cards, "ironstinger", 5) == []
+    assert find(cards, "ironstinger", 1) == ["Ironsting Archaeologist"]
 
 
 def test_nicolas(cards):
-    assert find(cards, "nicolas", 5) == []
+    assert find(cards, "nicolas", 2) == [
+        "Nicholas, Stalwart Inventor",
+        "Nicola, Forbidden Strength",
+    ]
 
 
 def test_fantasmal(cards):
-    assert find(cards, "fantasmal fairy", 5) == []
+    assert find(cards, "fantasmal fairy", 1) == ["Phantasmal Fairy Dragon"]
 
 
 def test_absorbtion(cards):
-    assert find(cards, "mystic absorbtion", 5) == []
+    assert find(cards, "mystic absorbtion", 1) == ["Mystic Absorption"]
 
 
 def test_falconeer(cards):
-    assert find(cards, "storied falconeer", 5) == []
+    assert find(cards, "storied falconeer", 1) == ["Storied Falconer"]

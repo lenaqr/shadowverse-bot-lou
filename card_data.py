@@ -1,3 +1,4 @@
+import difflib
 import aiohttp
 
 
@@ -25,33 +26,45 @@ def find(cards: list, query: str, *, num_results: int) -> list:
         return [card for card in cards if card["card_id"] == card_id]
 
     results = []
-    query = query.replace("’", "'")
     query_words = query.lower().split()
     for i, card in enumerate(cards):
         card_name = card["card_name"]
         if card_name is None:
             continue
-        name_words = card_name.lower().split()
-        extra_words = [
-            "{}pp".format(card["cost"]),
-            crafts[card["clan"]].lower(),
-            rarities[card["rarity"]].lower(),
-            card_types[card["char_type"]].lower(),
-        ]
-        score = 0
-        is_match = True
-        for query_word in query_words:
-            if query_word in name_words:
-                score += 3
-            elif any(name_word.startswith(query_word) for name_word in name_words):
-                score += 1
-            elif query_word in extra_words:
-                score += 1
-            else:
-                is_match = False
-        score /= len(name_words)
-        if is_match:
-            results.append((-score, i))
+        if query.islower():
+            card_name = card_name.lower()
+        if query == card_name:
+            is_exact = True
+            match_size = len(query)
+            match_cost = len(query)
+        else:
+            is_exact = False
+            s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
+            blocks = s.get_matching_blocks()
+            match_size = 0
+            match_cost = len(query)
+            pos = 0
+            for block in blocks:
+                match_size += block.size
+                num_unmatched_words = len(card_name[pos : block.b].split())
+                if block.b == len(card_name):
+                    if num_unmatched_words > 0:
+                        match_cost += 1
+                    if (
+                        num_unmatched_words > 1
+                        and pos < len(card_name)
+                        and not card_name[pos].isspace()
+                        and not card_name[pos] == ","
+                    ):
+                        match_cost += 1
+                else:
+                    match_cost += num_unmatched_words
+                pos = block.b + block.size
+            assert pos == len(card_name)
+        card_id = card["card_id"]
+        is_alt_or_token = card_id >= 700000000
+        key = (-is_exact, -match_size / match_cost, is_alt_or_token, -card_id)
+        results.append((key, i))
     results.sort()
     return [cards[i] for (_, i) in results[:num_results]]
 
