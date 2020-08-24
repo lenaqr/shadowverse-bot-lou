@@ -5,6 +5,7 @@ from discord.ext import commands
 
 import card_data
 import card_art
+import deck_code
 
 
 bot = commands.Bot(command_prefix=os.environ["BOT_PREFIX"])
@@ -104,6 +105,15 @@ async def evoart(ctx, *, query: str):
     """Display a card's evolved art"""
 
     await art_gen(ctx, query, "1")
+
+
+@bot.command(aliases=["deck", "code"])
+async def deckcode(ctx, code: str):
+    """Look up a deck code."""
+
+    result = await deck_code.get(code)
+    embed = discord.Embed.from_dict(deck_code.embed(result))
+    await ctx.send(embed=embed)
 
 
 @bot.command(hidden=True)
