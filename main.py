@@ -106,6 +106,14 @@ async def evoart(ctx, *, query: str):
     await art_gen(ctx, query, "1")
 
 
+@bot.command(hidden=True)
+async def eggsplosion(ctx):
+    async with ctx.typing():
+        cards = await card_data.get()
+    card = card_data.eggsplosion_card(cards)
+    await ctx.send(f"{card} dies to Eggsplosion")
+
+
 @bot.command(aliases=["bugreport", "bug", "report"])
 async def feedback(ctx, *, message: str):
     """Report feedback to the bot dev"""

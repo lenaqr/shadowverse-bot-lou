@@ -1,3 +1,4 @@
+import random
 import difflib
 import aiohttp
 
@@ -175,3 +176,12 @@ def flavor_embed(card: dict) -> dict:
         text = card["description"].replace("<br>", "\n")
         fields = [dict(name=card_type, value=text)]
     return dict(title=title, description=description, fields=fields)
+
+
+def eggsplosion_card(cards: list) -> str:
+    cards = [
+        card
+        for card in cards
+        if card_types[card["char_type"]] == "Follower" and card["life"] <= 3
+    ]
+    return random.choice(cards)["card_name"]
