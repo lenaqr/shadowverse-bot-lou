@@ -38,6 +38,11 @@ def find(cards: list, query: str, *, num_results: int) -> list:
             match_size = len(query)
             match_cost = len(query)
         else:
+            # iterate over blocks of matching characters as returned by
+            # difflib, to get
+            # - "match_size", the number of matching characters
+            # - "match_cost", the number of edit operations from the card name
+            #   to the search query
             is_exact = False
             s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
             blocks = s.get_matching_blocks()
@@ -45,9 +50,17 @@ def find(cards: list, query: str, *, num_results: int) -> list:
             match_cost = len(query)
             pos = 0
             for block in blocks:
+                # we matched `block.size` characters and we skipped over the
+                # substring `card_name[pos : block.b]`
                 match_size += block.size
                 num_unmatched_words = len(card_name[pos : block.b].split())
-                if block.b == len(card_name):
+                if block.b < len(card_name):
+                    # cost 1 per word in the skipped substring
+                    match_cost += num_unmatched_words
+                else:
+                    # special case: we skipped over the whole rest of the
+                    # string. cost 1 to skip the rest, plus 1 to skip to the
+                    # end of the current word if we were in the middle of one.
                     if num_unmatched_words > 0:
                         match_cost += 1
                     if (
@@ -57,9 +70,9 @@ def find(cards: list, query: str, *, num_results: int) -> list:
                         and not card_name[pos] == ","
                     ):
                         match_cost += 1
-                else:
-                    match_cost += num_unmatched_words
+                # set `pos` to the end of the matching block
                 pos = block.b + block.size
+            # difflib always produces a dummy block at the end.
             assert pos == len(card_name)
         card_id = card["card_id"]
         is_alt_or_token = card_id >= 700000000
