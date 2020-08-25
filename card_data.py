@@ -97,10 +97,49 @@ def effective_card_name(card: dict) -> str:
     return card_name
 
 
+def name_match_score(card_name: str, query: str) -> float:
+    """Match the card name to the given query. Return a score between 0 and 1."""
+    # iterate over blocks of matching characters as returned by
+    # difflib, to get
+    # - "match_size", the number of matching characters
+    # - "match_cost", the number of edit operations from the card name
+    #   to the search query
+    s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
+    blocks = s.get_matching_blocks()
+    match_size = 0
+    match_cost = len(query)
+    pos = 0
+    for block in blocks:
+        # we matched `block.size` characters and we skipped over the
+        # substring `card_name[pos : block.b]`
+        match_size += block.size
+        num_unmatched_words = len(card_name[pos : block.b].split())
+        if block.b < len(card_name):
+            # cost 1 per word in the skipped substring
+            match_cost += num_unmatched_words
+        else:
+            # special case: we skipped over the whole rest of the
+            # string. cost 1 to skip the rest, plus 1 to skip to the
+            # end of the current word if we were in the middle of one.
+            if num_unmatched_words > 0:
+                match_cost += 1
+            if (
+                num_unmatched_words > 1
+                and pos < len(card_name)
+                and not card_name[pos].isspace()
+                and not card_name[pos] == ","
+            ):
+                match_cost += 1
+        # set `pos` to the end of the matching block
+        pos = block.b + block.size
+    # difflib always produces a dummy block at the end.
+    assert pos == len(card_name)
+    return match_size / match_cost
+
+
 def find(cards: list, query: str, *, num_results: int) -> list:
     """Find cards whose names match the query string."""
     results = []
-    query_words = query.lower().split()
     for i, card in enumerate(cards):
         card_name = effective_card_name(card)
         if card_name is None:
@@ -109,51 +148,48 @@ def find(cards: list, query: str, *, num_results: int) -> list:
             card_name = card_name.lower()
         if query == card_name:
             is_exact = True
-            match_size = len(query)
-            match_cost = len(query)
+            match_score = 1.0
         else:
-            # iterate over blocks of matching characters as returned by
-            # difflib, to get
-            # - "match_size", the number of matching characters
-            # - "match_cost", the number of edit operations from the card name
-            #   to the search query
             is_exact = False
-            s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
-            blocks = s.get_matching_blocks()
-            match_size = 0
-            match_cost = len(query)
-            pos = 0
-            for block in blocks:
-                # we matched `block.size` characters and we skipped over the
-                # substring `card_name[pos : block.b]`
-                match_size += block.size
-                num_unmatched_words = len(card_name[pos : block.b].split())
-                if block.b < len(card_name):
-                    # cost 1 per word in the skipped substring
-                    match_cost += num_unmatched_words
-                else:
-                    # special case: we skipped over the whole rest of the
-                    # string. cost 1 to skip the rest, plus 1 to skip to the
-                    # end of the current word if we were in the middle of one.
-                    if num_unmatched_words > 0:
-                        match_cost += 1
-                    if (
-                        num_unmatched_words > 1
-                        and pos < len(card_name)
-                        and not card_name[pos].isspace()
-                        and not card_name[pos] == ","
-                    ):
-                        match_cost += 1
-                # set `pos` to the end of the matching block
-                pos = block.b + block.size
-            # difflib always produces a dummy block at the end.
-            assert pos == len(card_name)
+            match_score = name_match_score(card_name, query)
         card_id = card["card_id"]
         is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
-        key = (-is_exact, -match_size / match_cost, is_alt_or_token, -card_id)
-        results.append((key, i))
+        key = (-is_exact, -match_score, is_alt_or_token, -card_id)
+        results += [(key, i)]
     results.sort()
     return [cards[i] for (_, i) in results[:num_results]]
+
+
+def search(cards: list, query: list) -> list:
+    """Search cards by full text and keywords."""
+    results = []
+    for card in cards:
+        if card["card_name"] is None:
+            continue
+        fields = [
+            effective_card_name(card),
+            "{cost}pp".format(cost=card["cost"]),
+            crafts[card["clan"]],
+            rarities[card["rarity"]],
+            card_types[card["char_type"]],
+            card["tribe_name"],
+            card_sets[card["card_set_id"]],
+            card["skill_disc"],
+            card["evo_skill_disc"],
+        ]
+        is_match = True
+        for query_word in query:
+            word_found = False
+            for field in fields:
+                if query_word in (field.lower() if query_word.islower() else field):
+                    word_found = True
+                    break
+            if not word_found:
+                is_match = False
+                break
+        if is_match:
+            results += [card]
+    return results
 
 
 def reformat_text(text: str) -> str:

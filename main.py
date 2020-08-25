@@ -27,7 +27,7 @@ async def invite(ctx):
 
 @bot.command()
 async def cards(ctx, *, query: str):
-    """List all matching cards"""
+    """List all matching cards by name"""
 
     async with ctx.typing():
         cards = await card_data.get()
@@ -100,11 +100,36 @@ async def art(ctx, *, query: str):
     await art_gen(ctx, query, "0")
 
 
-@bot.command(aliases=["evoimg"])
+@bot.command(aliases=["evoimg", "evo"])
 async def evoart(ctx, *, query: str):
     """Display a card's evolved art"""
 
     await art_gen(ctx, query, "1")
+
+
+@bot.command(aliases=["filter", "find"])
+async def search(ctx, *query):
+    """Search by full text and list all matching cards.
+
+    Examples:
+    - search shadowcraft 6pp gold spell
+    - search earth sigil
+    - search havencraft "repair mode"
+    - search legendary "steel rebellion"
+    """
+
+    async with ctx.typing():
+        cards = await card_data.get()
+    results = card_data.search(cards, query)
+    if not results:
+        await ctx.send(f'Found no cards matching "{query}"')
+    else:
+        max_results = 20
+        lines = [f"Found {len(results)} cards:"]
+        lines += [card_data.effective_card_name(card) for card in results[:max_results]]
+        if len(results) > max_results:
+            lines += [f"({len(results) - max_results} more)"]
+        await ctx.send("\n".join(lines))
 
 
 @bot.command(aliases=["deck", "code"])
