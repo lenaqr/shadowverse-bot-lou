@@ -107,7 +107,7 @@ async def evoart(ctx, *, query: str):
     await art_gen(ctx, query, "1")
 
 
-@bot.command(aliases=["filter", "find"])
+@bot.command(aliases=["filter", "list"])
 async def search(ctx, *query):
     """Search by full text and list all matching cards.
 
