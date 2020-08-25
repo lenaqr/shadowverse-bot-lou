@@ -112,7 +112,7 @@ async def search(ctx, *query):
     """Search by full text and list all matching cards.
 
     Examples:
-    - search shadowcraft 6pp gold spell
+    - search 6pp shadow gold spell
     - search earth sigil
     - search havencraft "repair mode"
     - search legendary "steel rebellion"
