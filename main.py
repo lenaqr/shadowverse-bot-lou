@@ -43,7 +43,7 @@ async def cards(ctx, *, query: str):
         await ctx.send("\n".join(lines))
 
 
-@bot.command(aliases=["text"])
+@bot.command(aliases=["text", "t"])
 async def card(ctx, *, query: str):
     """Display a card's stats and text"""
 
