@@ -104,6 +104,8 @@ def name_match_score(card_name: str, query: str) -> float:
     # - "match_size", the number of matching characters
     # - "match_cost", the number of edit operations from the card name
     #   to the search query
+    if query.islower():
+        card_name = card_name.lower()
     s = difflib.SequenceMatcher(str.isspace, query, card_name, autojunk=False)
     blocks = s.get_matching_blocks()
     match_size = 0
@@ -137,27 +139,21 @@ def name_match_score(card_name: str, query: str) -> float:
     return match_size / match_cost
 
 
-def find(cards: list, query: str, *, num_results: int) -> list:
+def find(cards: list, query: str, *, threshold = 0.625) -> list:
     """Find cards whose names match the query string."""
     results = []
     for i, card in enumerate(cards):
         card_name = effective_card_name(card)
         if card_name is None:
             continue
-        if query.islower():
-            card_name = card_name.lower()
-        if query == card_name:
-            is_exact = True
-            match_score = 1.0
-        else:
-            is_exact = False
-            match_score = name_match_score(card_name, query)
+        match_score = name_match_score(card_name, query)
         card_id = card["card_id"]
         is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
-        key = (-is_exact, -match_score, is_alt_or_token, -card_id)
-        results += [(key, i)]
+        key = (-match_score, is_alt_or_token, -card_id)
+        if match_score >= threshold:
+            results += [(key, i)]
     results.sort()
-    return [cards[i] for (_, i) in results[:num_results]]
+    return [cards[i] for (key, i) in results]
 
 
 def search(cards: list, query: list) -> list:
@@ -176,6 +172,7 @@ def search(cards: list, query: list) -> list:
             card_sets[card["card_set_id"]],
             card["skill_disc"],
             card["evo_skill_disc"],
+            "{atk}/{life}".format(atk=card["atk"], life=card["life"]),
         ]
         is_match = True
         for query_word in query:

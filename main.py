@@ -31,14 +31,16 @@ async def cards(ctx, *, query: str):
 
     async with ctx.typing():
         cards = await card_data.get()
-    results = card_data.find(cards, query, num_results=10)
+    results = card_data.find(cards, query, threshold=0.5)
     if not results:
         await ctx.send(f'Found no cards matching "{query}"')
     else:
-        await ctx.send(
-            "Found these cards:\n"
-            + "\n".join(card_data.effective_card_name(card) for card in results)
-        )
+        max_results = 10
+        lines = [f"Found {len(results)} cards:"]
+        lines += [card_data.effective_card_name(card) for card in results[:max_results]]
+        if len(results) > max_results:
+            lines += [f"({len(results) - max_results} more)"]
+        await ctx.send("\n".join(lines))
 
 
 @bot.command(aliases=["text"])
@@ -47,11 +49,11 @@ async def card(ctx, *, query: str):
 
     async with ctx.typing():
         cards = await card_data.get()
-    results = card_data.find(cards, query, num_results=1)
+    results = card_data.find(cards, query)
     if not results:
         await ctx.send(f'Found no cards matching "{query}"')
     else:
-        [result] = results
+        result = results[0]
         embed = discord.Embed.from_dict(card_data.info_embed(result))
         await ctx.send(embed=embed)
 
@@ -62,11 +64,11 @@ async def flavortext(ctx, *, query: str):
 
     async with ctx.typing():
         cards = await card_data.get()
-    results = card_data.find(cards, query, num_results=1)
+    results = card_data.find(cards, query)
     if not results:
         await ctx.send(f'Found no cards matching "{query}"')
     else:
-        [result] = results
+        result = results[0]
         embed = discord.Embed.from_dict(card_data.flavor_embed(result))
         await ctx.send(embed=embed)
 
@@ -77,11 +79,11 @@ async def art_gen(ctx, query: str, which: str):
     async with ctx.typing():
         cards = await card_data.get()
 
-    results = card_data.find(cards, query, num_results=1)
+    results = card_data.find(cards, query)
     if not results:
         await ctx.send(f'Found no cards matching "{query}"')
         return
-    [result] = results
+    result = results[0]
     card_name = card_data.effective_card_name(result)
 
     async with ctx.typing():
