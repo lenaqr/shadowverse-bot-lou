@@ -50,7 +50,7 @@ async def cards(ctx, *, query: str):
         await ctx.send("\n".join(lines))
 
 
-@bot.command(aliases=["text", "t"])
+@bot.command(aliases=["text", "c", "t"])
 async def card(ctx, *, query: str):
     """Display a card's stats and text"""
 
@@ -65,7 +65,7 @@ async def card(ctx, *, query: str):
         await ctx.send(embed=embed)
 
 
-@bot.command(aliases=["flavor", "flavour", "flavourtext", "flair", "flairtext"])
+@bot.command(aliases=["flavor", "flavourtext", "flavour", "flairtext", "flair"])
 async def flavortext(ctx, *, query: str):
     """Display a card's flavortext"""
 
@@ -102,21 +102,21 @@ async def art_gen(ctx, query: str, which: str):
         await ctx.send(card_name, file=discord.File(image, "0.png"))
 
 
-@bot.command(aliases=["img"])
+@bot.command(aliases=["img", "a"])
 async def art(ctx, *, query: str):
     """Display a card's base art"""
 
     await art_gen(ctx, query, "0")
 
 
-@bot.command(aliases=["evoimg", "evo"])
+@bot.command(aliases=["evoimg", "evo", "e"])
 async def evoart(ctx, *, query: str):
     """Display a card's evolved art"""
 
     await art_gen(ctx, query, "1")
 
 
-@bot.command(aliases=["filter", "list"])
+@bot.command(aliases=["filter", "list", "s"])
 async def search(ctx, *query):
     """Search by full text and list all matching cards.
 
