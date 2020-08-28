@@ -58,7 +58,7 @@ async def card(ctx, *, query: str):
         await ctx.send(embed=embed)
 
 
-@bot.command(aliases=["flavor", "flair"])
+@bot.command(aliases=["flavor", "flavour", "flavourtext", "flair", "flairtext"])
 async def flavortext(ctx, *, query: str):
     """Display a card's flavortext"""
 
