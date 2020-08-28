@@ -7,13 +7,20 @@ import card_data
 import card_art
 import deck_code
 
+command_prefix = os.environ["BOT_PREFIX"].split()
 
-bot = commands.Bot(command_prefix=os.environ["BOT_PREFIX"])
+bot = commands.Bot(
+    command_prefix=command_prefix,
+    description=os.environ.get("DESCRIPTION", "Shadowverse info bot"),
+)
 
 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
+    if os.environ.get("DEV") is None:
+        activity = discord.Game(name=f"{command_prefix[0]}help")
+        await bot.change_presence(activity=activity)
 
 
 @bot.command()
