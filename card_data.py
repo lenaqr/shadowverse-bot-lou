@@ -209,7 +209,7 @@ def find_by_keywords(cards: list, query: list) -> list:
     return [cards[i] for (key, i) in results]
 
 
-def find(cards: list, query: list, threshold=0.625) -> list:
+def find(cards: list, query: list, threshold=0.75) -> list:
     """Find by name or keywords."""
     name_results = find_by_name(cards, " ".join(query), threshold=threshold)
     keyword_results = find_by_keywords(cards, query)
