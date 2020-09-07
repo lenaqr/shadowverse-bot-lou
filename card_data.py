@@ -139,7 +139,7 @@ def name_match_score(card_name: str, query: str) -> float:
     return match_size / match_cost
 
 
-def find(cards: list, query: str, *, threshold = 0.625) -> list:
+def find(cards: list, query: str, *, threshold = 0.5) -> list:
     """Find cards whose names match the query string."""
     results = []
     for i, card in enumerate(cards):

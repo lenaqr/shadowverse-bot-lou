@@ -38,7 +38,7 @@ async def cards(ctx, *, query: str):
 
     async with ctx.typing():
         cards = await card_data.get()
-    results = card_data.find(cards, query, threshold=0.5)
+    results = card_data.find(cards, query)
     if not results:
         await ctx.send(f'Found no cards matching "{query}"')
     else:
