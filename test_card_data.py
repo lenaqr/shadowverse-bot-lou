@@ -22,11 +22,12 @@ def test_bellring(cards):
 
 
 def test_medusa(cards):
-    assert find(cards, "medusa")[:6] == [
+    assert find(cards, "medusa")[:7] == [
         "Medusa",
         "Medusa, Evil-Eyed Serpent",
         "Sweet-Tooth Medusa",
         "Venomfang Medusa",
+        "Venomfang Medusa (Alt Leader)",
         "Medusa's Gaze",
         "Medusiana",
     ]

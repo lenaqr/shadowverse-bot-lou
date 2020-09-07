@@ -157,7 +157,7 @@ def find_by_name(cards: list, query: str, *, threshold) -> list:
     """Find cards whose names match the query string."""
     results = []
     for i, card in enumerate(cards):
-        card_name = effective_card_name(card)
+        card_name = card["card_name"]
         if card_name is None:
             continue
         match_score = name_match_score(card_name, query)
