@@ -15,6 +15,19 @@ bot = commands.Bot(
 )
 
 
+class CardNotFoundError(Exception):
+    def __init__(self, query: list):
+        self.query = query
+        super().__init__(query)
+
+
+class CardArtError(Exception):
+    def __init__(self, card_id: int, card_name: str):
+        self.card_id = card_id
+        self.card_name = card_name
+        super().__init__(card_id, card_name)
+
+
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
@@ -48,7 +61,7 @@ async def cards(ctx, *query):
         cards = await card_data.get()
     results = card_data.find(cards, query)
     if not results:
-        await ctx.send(f'Found no cards matching "{query}"')
+        raise CardNotFoundError(query)
     else:
         max_results = 20
         lines = [f"Found {len(results)} cards:"]
@@ -66,7 +79,7 @@ async def card(ctx, *query):
         cards = await card_data.get()
     results = card_data.find(cards, query)
     if not results:
-        await ctx.send(f'Found no cards matching "{query}"')
+        raise CardNotFoundError(query)
     else:
         result = results[0]
         embed = discord.Embed.from_dict(card_data.info_embed(result))
@@ -81,7 +94,7 @@ async def flavortext(ctx, *query):
         cards = await card_data.get()
     results = card_data.find(cards, query)
     if not results:
-        await ctx.send(f'Found no cards matching "{query}"')
+        raise CardNotFoundError(query)
     else:
         result = results[0]
         embed = discord.Embed.from_dict(card_data.flavor_embed(result))
@@ -96,16 +109,16 @@ async def art_gen(ctx, query: list, which: str):
 
     results = card_data.find(cards, query)
     if not results:
-        await ctx.send(f'Found no cards matching "{query}"')
-        return
+        raise CardNotFoundError(query)
     result = results[0]
+    card_id = result["card_id"]
     card_name = card_data.effective_card_name(result)
 
     async with ctx.typing():
-        image = await card_art.get_asset(result["card_id"], which)
+        image = await card_art.get_asset(card_id, which)
 
     if image is None:
-        await ctx.send(f'Failed to get card art for "{card_name}"')
+        raise CardArtError(card_id, card_name)
     else:
         await ctx.send(card_name, file=discord.File(image, "0.png"))
 
@@ -170,6 +183,12 @@ async def on_command_error(ctx, error):
                 f"Tip: Use `{ctx.prefix}card` to look up a card. "
                 f"See `{ctx.prefix}help` for other commands."
             )
+    elif isinstance(error, discord.ext.commands.CommandInvokeError):
+        error = error.original
+        if isinstance(error, CardNotFoundError):
+            await ctx.send(f'Found no cards matching `{error.query}`')
+        elif isinstance(error, CardArtError):
+            await ctx.send(f'Failed to get card art for "{error.card_name}"')
     if "LOG_CHANNEL" in os.environ:
         log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
         await log_channel.send(
