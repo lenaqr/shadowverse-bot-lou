@@ -153,6 +153,23 @@ async def feedback(ctx, *, message: str):
 
 @bot.event
 async def on_command_error(ctx, error):
+    if isinstance(error, discord.ext.commands.CommandNotFound):
+        if ctx.invoked_with == "art2":
+            await ctx.send(
+                f"{error}\n"
+                f"Tip: Use `{ctx.prefix}evoart` to look up evolved art. "
+                "For alternate card art, you can specify 'alt' or the card set. Examples:\n"
+                f"- `{ctx.prefix}art fairy circle alt`\n"
+                f"- `{ctx.prefix}art albert leader`\n"
+                f"- `{ctx.prefix}art albert prebuilt`\n"
+                f"- `{ctx.prefix}art witch snap fate`\n"
+            )
+        else:
+            await ctx.send(
+                f"{error}\n"
+                f"Tip: Use `{ctx.prefix}card` to look up a card. "
+                f"See `{ctx.prefix}help` for other commands."
+            )
     if "LOG_CHANNEL" in os.environ:
         log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
         await log_channel.send(
