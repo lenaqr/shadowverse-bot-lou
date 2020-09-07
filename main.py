@@ -32,8 +32,8 @@ async def invite(ctx):
     await ctx.send(f"Invite me to your server: <{link}>")
 
 
-@bot.command(aliases=["cards", "search", "l", "s"])
-async def list(ctx, *query):
+@bot.command(aliases=["list", "l", "search", "s"])
+async def cards(ctx, *query):
     """List all matching cards.
 
     Keyword search is supported. Examples:
@@ -58,7 +58,7 @@ async def list(ctx, *query):
         await ctx.send("\n".join(lines))
 
 
-@bot.command(aliases=["text", "c", "t"])
+@bot.command(aliases=["c", "text", "t"])
 async def card(ctx, *query):
     """Display a card's stats and text"""
 
@@ -73,7 +73,7 @@ async def card(ctx, *query):
         await ctx.send(embed=embed)
 
 
-@bot.command(aliases=["flavor", "flavourtext", "flavour", "flairtext", "flair"])
+@bot.command(aliases=["flavourtext", "flavor", "flavour", "flairtext", "flair", "f"])
 async def flavortext(ctx, *query):
     """Display a card's flavortext"""
 
