@@ -65,6 +65,10 @@ card_sets = {
     70017: "Code Geass Lelouch of the Rebellion Tie-in",
     90000: "Token",
 }
+formats = {
+    0: "Unlimited",
+    1: "Rotation",
+}
 
 
 _cache = None
@@ -79,7 +83,7 @@ async def _update():
     cards = json["data"]["cards"]
 
     # compute derived fields -- currently just base card set id
-    cards_by_id = { card["card_id"]: card for card in cards }
+    cards_by_id = {card["card_id"]: card for card in cards}
     for card in cards:
         card["base_card_set_id"] = cards_by_id[card["base_card_id"]]["card_set_id"]
 
@@ -181,6 +185,7 @@ def find_by_keywords(cards: list, query: list) -> list:
             card_types[card["char_type"]],
             card["tribe_name"],
             card_sets[card["card_set_id"]],
+            formats[card["format_type"]],
             card["skill_disc"],
             card["evo_skill_disc"],
             "{atk}/{life}".format(atk=card["atk"], life=card["life"]),
