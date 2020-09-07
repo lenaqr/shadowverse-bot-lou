@@ -76,7 +76,14 @@ async def _update():
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             json = await response.json()
-    _cache = json["data"]["cards"]
+    cards = json["data"]["cards"]
+
+    # compute derived fields -- currently just base card set id
+    cards_by_id = { card["card_id"]: card for card in cards }
+    for card in cards:
+        card["base_card_set_id"] = cards_by_id[card["base_card_id"]]["card_set_id"]
+
+    _cache = cards
 
 
 async def get() -> list:
@@ -92,8 +99,11 @@ def effective_card_name(card: dict) -> str:
     if card_name is None:
         return None
     if card["card_id"] != card["base_card_id"]:
-        card_set = card_sets[card["card_set_id"]]
-        return card_name + f" (Alt: {card_set})"
+        if card["card_set_id"] == card["base_card_set_id"]:
+            return card_name + " (Alt Leader)"
+        else:
+            card_set = card_sets[card["card_set_id"]]
+            return card_name + f" (Alt: {card_set})"
     return card_name
 
 
