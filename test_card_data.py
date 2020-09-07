@@ -10,7 +10,8 @@ async def cards():
 
 def find(cards, query):
     return [
-        card_data.effective_card_name(card) for card in card_data.find(cards, query)
+        card_data.effective_card_name(card)
+        for card in card_data.find(cards, query.split())
     ]
 
 
@@ -55,22 +56,19 @@ def test_mono(cards):
 
 
 def test_resolve(cards):
-    assert find(cards, "resolve")[:5] == [
+    assert find(cards, "resolve")[:4] == [
         "Resolve of the Fallen",
         "Intertwined Resolve",
         "Mono's Resolve",
         "Leonidas's Resolve",
-        "Gelt, Resolute Knight",
     ]
 
 
 def test_prophetess(cards):
-    assert find(cards, "prophetess")[:5] == [
+    assert find(cards, "prophetess")[:3] == [
         "Prophetess of Creation",
         "Elf Prophetess",
         "Teo, Prophetess of Creation (Alt: Omen of the Ten)",
-        "Protectoress",
-        "Prism Priestess",
     ]
 
 

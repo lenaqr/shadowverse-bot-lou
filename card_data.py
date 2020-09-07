@@ -139,7 +139,7 @@ def name_match_score(card_name: str, query: str) -> float:
     return match_size / match_cost
 
 
-def find(cards: list, query: str, *, threshold = 0.5) -> list:
+def find_by_name(cards: list, query: str, *, threshold) -> list:
     """Find cards whose names match the query string."""
     results = []
     for i, card in enumerate(cards):
@@ -156,7 +156,7 @@ def find(cards: list, query: str, *, threshold = 0.5) -> list:
     return [cards[i] for (key, i) in results]
 
 
-def search(cards: list, query: list) -> list:
+def find_by_keywords(cards: list, query: list) -> list:
     """Search cards by full text and keywords."""
     results = []
     for i, card in enumerate(cards):
@@ -192,6 +192,18 @@ def search(cards: list, query: list) -> list:
             results += [(key, i)]
     results.sort()
     return [cards[i] for (key, i) in results]
+
+
+def find(cards: list, query: list, threshold=0.625) -> list:
+    """Find by name or keywords."""
+    name_results = find_by_name(cards, " ".join(query), threshold=threshold)
+    keyword_results = find_by_keywords(cards, query)
+    if len(name_results) == 0:
+        return keyword_results
+    elif len(name_results) > 1 and len(keyword_results) == 1:
+        return keyword_results
+    else:
+        return name_results
 
 
 def reformat_text(text: str) -> str:
