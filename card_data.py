@@ -147,10 +147,10 @@ def find(cards: list, query: str, *, threshold = 0.5) -> list:
         if card_name is None:
             continue
         match_score = name_match_score(card_name, query)
-        card_id = card["card_id"]
-        is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
-        key = (-match_score, is_alt_or_token, -card_id)
         if match_score >= threshold:
+            card_id = card["card_id"]
+            is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
+            key = (-match_score, is_alt_or_token, -card_id)
             results += [(key, i)]
     results.sort()
     return [cards[i] for (key, i) in results]
@@ -159,11 +159,12 @@ def find(cards: list, query: str, *, threshold = 0.5) -> list:
 def search(cards: list, query: list) -> list:
     """Search cards by full text and keywords."""
     results = []
-    for card in cards:
-        if card["card_name"] is None:
+    for i, card in enumerate(cards):
+        card_name = effective_card_name(card)
+        if card_name is None:
             continue
         fields = [
-            effective_card_name(card),
+            card_name,
             "{cost}pp".format(cost=card["cost"]),
             crafts[card["clan"]],
             rarities[card["rarity"]],
@@ -185,8 +186,12 @@ def search(cards: list, query: list) -> list:
                 is_match = False
                 break
         if is_match:
-            results += [card]
-    return results
+            card_id = card["card_id"]
+            is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
+            key = (is_alt_or_token, -card_id)
+            results += [(key, i)]
+    results.sort()
+    return [cards[i] for (key, i) in results]
 
 
 def reformat_text(text: str) -> str:
