@@ -154,7 +154,7 @@ async def feedback(ctx, *, message: str):
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, discord.ext.commands.CommandNotFound):
-        if ctx.invoked_with == "art2":
+        if ctx.invoked_with in ["art1", "art2", "art3", "art4", "art5", "art6"]:
             await ctx.send(
                 f"{error}\n"
                 f"Tip: Use `{ctx.prefix}evoart` to look up evolved art. "
