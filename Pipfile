@@ -11,7 +11,6 @@ pytest-asyncio = "*"
 [packages]
 "discord.py" = "*"
 aiohttp = "*"
-unitypack = {git = "https://github.com/HearthSim/UnityPack"}
 
 [requires]
 python_version = "3.8"
