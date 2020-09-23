@@ -45,7 +45,7 @@ card_sets = {
     10015: "Ultimate Colosseum",
     10016: "World Uprooted",
     10017: "Fortune's Hand",
-    10018: "Set 18",
+    10018: "Storm Over Rivayle",
     10019: "Set 19",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
