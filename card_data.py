@@ -45,7 +45,7 @@ card_sets = {
     10015: "Ultimate Colosseum",
     10016: "World Uprooted",
     10017: "Fortune's Hand",
-    10018: "Set 18",
+    10018: "Storm Over Rivayle",
     10019: "Set 19",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
@@ -213,10 +213,19 @@ def find(cards: list, query: list, threshold=0.75) -> list:
     """Find by name or keywords."""
     name_results = find_by_name(cards, " ".join(query), threshold=threshold)
     keyword_results = find_by_keywords(cards, query)
-    if len(name_results) == 0:
-        return keyword_results
-    elif len(name_results) > 1 and len(keyword_results) == 1:
-        return keyword_results
+    if len(keyword_results) >= 1:
+        # Return results in the order that they appear in `name_results`, if
+        # they do appear.
+        result_ids = set(card["card_id"] for card in keyword_results)
+        results = []
+        for card in name_results + keyword_results:
+            try:
+                result_ids.remove(card["card_id"])
+            except KeyError:
+                continue
+            results += [card]
+        assert not result_ids
+        return results
     else:
         return name_results
 
@@ -259,7 +268,8 @@ def info_embed(card: dict) -> dict:
     else:
         text = reformat_text(card["org_skill_disc"])
         fields = [dict(name=card_type, value=text)]
-    return dict(title=title, description=description, fields=fields)
+    url = "https://shadowverse-portal.com/card/" + str(card["card_id"])
+    return dict(title=title, description=description, fields=fields, url=url)
 
 
 def flavor_embed(card: dict) -> dict:
