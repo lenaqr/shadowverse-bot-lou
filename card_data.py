@@ -268,7 +268,8 @@ def info_embed(card: dict) -> dict:
     else:
         text = reformat_text(card["org_skill_disc"])
         fields = [dict(name=card_type, value=text)]
-    return dict(title=title, description=description, fields=fields)
+    url = "https://shadowverse-portal.com/card/" + str(card["card_id"])
+    return dict(title=title, description=description, fields=fields, url=url)
 
 
 def flavor_embed(card: dict) -> dict:
