@@ -194,6 +194,7 @@ async def on_command_error(ctx, error):
         log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
         await log_channel.send(
             f"Error from {ctx.author} in {ctx.guild} {ctx.channel}: "
+            f"{ctx.message.jump_url}"
             f"```{repr(error)}```"
         )
     else:
