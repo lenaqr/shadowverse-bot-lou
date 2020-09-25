@@ -162,6 +162,7 @@ async def feedback(ctx, *, message: str):
     await log_channel.send(
         f"Feedback from {ctx.author} in {ctx.guild} {ctx.channel}: ```{message}```"
     )
+    await ctx.send("Feedback sent. Thank you!")
 
 
 @bot.event
