@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 import discord
 from discord.ext import commands
@@ -64,11 +65,48 @@ async def cards(ctx, *query):
         raise CardNotFoundError(query)
     else:
         max_results = 20
-        lines = [f"Found {len(results)} cards:"]
-        lines += [card_data.effective_card_name(card) for card in results[:max_results]]
-        if len(results) > max_results:
-            lines += [f"({len(results) - max_results} more)"]
-        await ctx.send("\n".join(lines))
+        if len(results) <= max_results:
+            lines = [f"Found {len(results)} cards:"]
+            lines += [card_data.effective_card_name(card) for card in results]
+            await ctx.send("\n".join(lines))
+        else:
+            lo = 0
+            hi = max_results
+            lines = [f"Found {len(results)} cards, displaying {lo+1}-{hi}:"]
+            lines += [card_data.effective_card_name(card) for card in results[lo:hi]]
+            msg = await ctx.send("\n".join(lines))
+            await msg.add_reaction("⬅️")
+            await msg.add_reaction("➡️")
+
+            def check(reaction, user):
+                return (
+                    user != bot.user
+                    and reaction.message.id == msg.id
+                    and reaction.emoji in ["➡️", "⬅️"]
+                )
+
+            while True:
+                try:
+                    reaction, usr = await bot.wait_for(
+                        "reaction_add", timeout=30.0, check=check
+                    )
+                except asyncio.TimeoutError:
+                    await msg.remove_reaction("➡️", bot.user)
+                    await msg.remove_reaction("⬅️", bot.user)
+                    break
+                else:
+                    if reaction.emoji == "➡️":
+                        hi = min(len(results), hi + max_results)
+                        lo = hi - max_results
+                    elif reaction.emoji == "⬅️":
+                        lo = max(0, lo - max_results)
+                        hi = lo + max_results
+
+                    lines = [f"Found {len(results)} cards, displaying {lo+1}-{hi}:"]
+                    lines += [
+                        card_data.effective_card_name(card) for card in results[lo:hi]
+                    ]
+                    await msg.edit(content="\n".join(lines))
 
 
 @bot.command(aliases=["c", "text", "t"])
@@ -187,7 +225,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, discord.ext.commands.CommandInvokeError):
         error = error.original
         if isinstance(error, CardNotFoundError):
-            await ctx.send(f'Found no cards matching `{error.query}`')
+            await ctx.send(f"Found no cards matching `{error.query}`")
         elif isinstance(error, CardArtError):
             await ctx.send(f'Failed to get card art for "{error.card_name}"')
     if "LOG_CHANNEL" in os.environ:
