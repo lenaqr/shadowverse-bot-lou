@@ -29,6 +29,10 @@ class CardArtError(Exception):
         super().__init__(card_id, card_name)
 
 
+# Hack: avoid raising UnexpectedQuoteError
+commands.view._all_quotes = set()
+
+
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
