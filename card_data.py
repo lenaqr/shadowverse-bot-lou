@@ -194,7 +194,10 @@ def find_by_keywords(cards: list, query: list) -> list:
         for query_word in query:
             word_found = False
             for field in fields:
-                if query_word.lower() == "storm" and field.lower() == "storm over rivayle":
+                if (
+                    query_word.lower() == "storm"
+                    and field.lower() == "storm over rivayle"
+                ):
                     # special case: ignore "storm" in "storm over rivayle"
                     continue
                 if query_word in (field.lower() if query_word.islower() else field):
