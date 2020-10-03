@@ -12,6 +12,8 @@ async def get(code: str) -> dict:
         )
         async with session.get(url) as response:
             json = await response.json()
+            if json["data"]["errors"]:
+                return {"errors": json["data"]["errors"]}
             h = json["data"]["hash"]
 
         url = (

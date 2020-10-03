@@ -29,6 +29,13 @@ class CardArtError(Exception):
         super().__init__(card_id, card_name)
 
 
+class DeckCodeError(Exception):
+    def __init__(self, deck_code: str, errors: list):
+        self.deck_code = deck_code
+        self.errors = errors
+        super().__init__(deck_code, errors)
+
+
 # Hack: avoid raising UnexpectedQuoteError
 commands.view._all_quotes = set()
 
@@ -183,7 +190,13 @@ async def evoart(ctx, *query):
 async def deckcode(ctx, code: str):
     """Look up a deck code."""
 
-    result = await deck_code.get(code)
+    async with ctx.typing():
+        result = await deck_code.get(code)
+
+    errors = result.get("errors")
+    if errors:
+        raise DeckCodeError(code, errors)
+
     embed = discord.Embed.from_dict(deck_code.embed(result))
     await ctx.send(embed=embed)
 
@@ -232,6 +245,8 @@ async def on_command_error(ctx, error):
             await ctx.send(f"Found no cards matching `{error.query}`")
         elif isinstance(error, CardArtError):
             await ctx.send(f'Failed to get card art for "{error.card_name}"')
+        elif isinstance(error, DeckCodeError):
+            await ctx.send(f"Failed to get deck code `{error.deck_code}`")
     if "LOG_CHANNEL" in os.environ:
         log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
         await log_channel.send(
