@@ -209,6 +209,13 @@ async def eggsplosion(ctx):
     await ctx.send(f"{card} dies to Eggsplosion")
 
 
+@bot.command(hidden=True, aliases=["pat", "hug", "kiss"])
+async def non_commands(ctx):
+    """Ignore these commands, which are probably intended for some other bot."""
+
+    pass
+
+
 @bot.command(aliases=["bugreport", "bug", "report"])
 async def feedback(ctx, *, message: str):
     """Report feedback to the bot dev"""
