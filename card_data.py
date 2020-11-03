@@ -63,7 +63,7 @@ card_sets = {
     70015: "The Idolmaster: Cinderella Girls Tie-in",
     70016: "NieR:Automata Tie-in",
     70017: "Code Geass Lelouch of the Rebellion Tie-in",
-    70018: "Champion's Battle Tie-in"
+    70018: "Champion's Battle Tie-in",
     90000: "Token",
 }
 formats = {
