@@ -30,7 +30,7 @@ async def get_assetmanifest() -> dict:
         [name, hexcode, *_] = fields
 
         prefix = "card_"
-        suffix = ".unity3d"
+        suffix = "0.unity3d"
         if not name.startswith(prefix) and name.endswith(suffix):
             continue
         card_id = name[len(prefix) : -len(suffix)]
@@ -51,7 +51,7 @@ async def get_asset(card_id: int, suffix: str) -> io.BytesIO:
     if data is None:
         manifest = await get_assetmanifest()
 
-        hexcode = manifest.get(card_id * 10)
+        hexcode = manifest.get(card_id)
         if hexcode is None:
             return None
 
