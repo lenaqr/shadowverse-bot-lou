@@ -46,7 +46,7 @@ card_sets = {
     10016: "World Uprooted",
     10017: "Fortune's Hand",
     10018: "Storm Over Rivayle",
-    10019: "Set 19",
+    10019: "Eternal Awakening",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
     70003: "Anigera DIDOON Tie-In",
