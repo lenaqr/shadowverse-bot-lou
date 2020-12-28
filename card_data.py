@@ -66,6 +66,8 @@ card_sets = {
     70018: "Champion's Battle Tie-in",
     70019: "Tie-in 19",
     70020: "Tie-in 20",
+    70021: "Tie-in 21",
+    70022: "Tie-in 22",
     90000: "Token",
 }
 formats = {
