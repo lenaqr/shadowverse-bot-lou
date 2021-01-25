@@ -66,7 +66,7 @@ card_sets = {
     70018: "Shadowverse: Champion's Battle Tie-in",
     70019: "Shadowverse: Champion's Battle",
     70020: "Granblue Fantasy Tie-in",
-    70021: "Tie-in 21",
+    70021: "Battle Pass",
     70022: "Tie-in 22",
     90000: "Token",
 }
