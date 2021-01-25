@@ -110,6 +110,8 @@ def effective_card_name(card: dict) -> str:
     if card["card_id"] != card["base_card_id"]:
         if card["card_set_id"] == card["base_card_set_id"]:
             return card_name + " (Alt Leader)"
+        elif card["card_set_id"] == 90000:
+            return card_name + " (Token)"
         else:
             card_set = card_sets[card["card_set_id"]]
             return card_name + f" (Alt: {card_set})"
