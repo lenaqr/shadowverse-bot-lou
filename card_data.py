@@ -171,7 +171,7 @@ def find_by_name(cards: list, query: str, *, threshold) -> list:
         if match_score >= threshold:
             card_id = card["card_id"]
             is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
-            key = (-match_score, is_alt_or_token, -card_id)
+            key = (-match_score, is_alt_or_token, -card["card_set_id"], card_name)
             results += [(key, i)]
     results.sort()
     return [cards[i] for (key, i) in results]
@@ -216,7 +216,7 @@ def find_by_keywords(cards: list, query: list) -> list:
         if is_match:
             card_id = card["card_id"]
             is_alt_or_token = card_id >= 700000000 or card_id != card["base_card_id"]
-            key = (is_alt_or_token, -card_id)
+            key = (is_alt_or_token, -card["card_set_id"], card_name)
             results += [(key, i)]
     results.sort()
     return [cards[i] for (key, i) in results]
