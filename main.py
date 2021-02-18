@@ -202,6 +202,12 @@ async def deckcode(ctx, code: str):
 
 
 @bot.command(hidden=True)
+async def update(ctx):
+    async with ctx.typing():
+        await card_data.update()
+
+
+@bot.command(hidden=True)
 async def eggsplosion(ctx):
     async with ctx.typing():
         cards = await card_data.get()
