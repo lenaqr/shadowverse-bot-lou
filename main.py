@@ -6,6 +6,7 @@ from discord.ext import commands
 
 import card_data
 import card_art
+import card_voice
 import deck_code
 
 command_prefix = os.environ["BOT_PREFIX"].split()
@@ -170,6 +171,22 @@ async def art_gen(ctx, query: list, which: str):
         raise CardArtError(card_id, card_name)
     else:
         await ctx.send(card_name, file=discord.File(image, "0.png"))
+
+
+@bot.command(aliases=["v"])
+async def voice(ctx, *query):
+    async with ctx.typing():
+        cards = await card_data.get()
+
+    results = card_data.find(cards, query)
+    if not results:
+        raise CardNotFoundError(query)
+    result = results[0]
+
+    async with ctx.typing():
+        embed = await card_voice.svgdb_embed(result)
+
+    await ctx.send(embed=discord.Embed.from_dict(embed))
 
 
 @bot.command(aliases=["img", "a"])
