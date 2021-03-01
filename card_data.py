@@ -35,7 +35,7 @@ card_sets = {
     10005: "Wonderland Dreams",
     10006: "Starforged Legends",
     10007: "Chronogenesis",
-    10008: "Dawkbreak Nightedge",
+    10008: "Dawnbreak Nightedge",
     10009: "Brigade of the Sky",
     10010: "Omen of the Ten",
     10011: "Altersphere",
