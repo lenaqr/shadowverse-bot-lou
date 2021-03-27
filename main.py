@@ -235,6 +235,15 @@ async def deckcode(ctx, code: str):
     await ctx.send(embed=embed)
 
 
+@bot.command()
+async def randomcard(ctx):
+    async with ctx.typing():
+        cards = await card_data.get()
+    card = card_data.random_card(cards)
+    embed = discord.Embed.from_dict(card_data.info_embed(card))
+    await ctx.send(embed=embed)
+
+
 @bot.command(hidden=True)
 async def update(ctx):
     async with ctx.typing():
@@ -245,7 +254,7 @@ async def update(ctx):
 async def eggsplosion(ctx):
     async with ctx.typing():
         cards = await card_data.get()
-    card = card_data.eggsplosion_card(cards)
+    card = card_data.random_card(cards, eggsplosion=True)["card_name"]
     await ctx.send(f"{card} dies to Eggsplosion")
 
 

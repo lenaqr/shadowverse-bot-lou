@@ -304,11 +304,14 @@ def flavor_embed(card: dict) -> dict:
     return dict(title=title, description=description, fields=fields)
 
 
-def eggsplosion_card(cards: list) -> str:
-    """Return the name of a random card with 3 or less defense."""
-    cards = [
-        card
-        for card in cards
-        if card_types[card["char_type"]] == "Follower" and card["life"] <= 3
-    ]
-    return random.choice(cards)["card_name"]
+def random_card(cards: list, eggsplosion: bool = False) -> dict:
+    """Return the name of a random card."""
+    if eggsplosion:
+        cards = [
+            card
+            for card in cards
+            if card_types[card["char_type"]] == "Follower" and card["life"] <= 3
+        ]
+    else:
+        cards = [card for card in cards if card["card_id"] < 700000000]
+    return random.choice(cards)
