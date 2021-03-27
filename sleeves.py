@@ -1,6 +1,7 @@
 import io
 import os
 import tempfile
+import random
 
 import aiohttp
 import PIL
@@ -43,6 +44,17 @@ async def get_assetmanifest() -> dict:
 
     _assetmanifest = ret
     return ret
+
+
+async def get_random() -> io.BytesIO:
+    manifest = await get_assetmanifest()
+
+    for _ in range(10):
+        sleeve_id = random.choice(list(manifest.keys()))
+        asset = await get_asset(sleeve_id)
+        if asset is not None:
+            return asset, sleeve_id
+    return None
 
 
 async def get_asset(sleeve_id: int) -> io.BytesIO:

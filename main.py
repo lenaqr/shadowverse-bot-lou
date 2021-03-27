@@ -205,14 +205,17 @@ async def evoart(ctx, *query):
 
 
 @bot.command(hidden=True)
-async def sleeve(ctx, sleeve_id: int):
+async def sleeve(ctx, sleeve_id: int = -1):
     """Display sleeve art"""
 
     async with ctx.typing():
-        image = await sleeves.get_asset(sleeve_id)
+        if sleeve_id == -1:
+            image, sleeve_id = await sleeves.get_random()
+        else:
+            image = await sleeves.get_asset(sleeve_id)
 
     if image is None:
-        raise CardArtError(sleeve_id, sleeve_id)
+        raise CardArtError(sleeve_id, name)
     else:
         await ctx.send(sleeve_id, file=discord.File(image, "0.png"))
 
