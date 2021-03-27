@@ -7,6 +7,7 @@ from discord.ext import commands
 import card_data
 import card_art
 import card_voice
+import sleeves
 import deck_code
 
 command_prefix = os.environ["BOT_PREFIX"].split()
@@ -201,6 +202,19 @@ async def evoart(ctx, *query):
     """Display a card's evolved art"""
 
     await art_gen(ctx, query, "1")
+
+
+@bot.command(hidden=True)
+async def sleeve(ctx, sleeve_id: int):
+    """Display sleeve art"""
+
+    async with ctx.typing():
+        image = await sleeves.get_asset(sleeve_id)
+
+    if image is None:
+        raise CardArtError(sleeve_id, sleeve_id)
+    else:
+        await ctx.send(sleeve_id, file=discord.File(image, "0.png"))
 
 
 @bot.command(aliases=["deck", "code"])
