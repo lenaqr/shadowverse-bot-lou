@@ -204,7 +204,7 @@ async def evoart(ctx, *query):
     await art_gen(ctx, query, "1")
 
 
-@bot.command(hidden=True)
+@bot.command()
 async def sleeve(ctx, *query):
     """Display sleeve art"""
 
@@ -238,7 +238,7 @@ async def deckcode(ctx, code: str):
     await ctx.send(embed=embed)
 
 
-@bot.command()
+@bot.command(hidden=True)
 async def randomcard(ctx):
     async with ctx.typing():
         cards = await card_data.get()
