@@ -204,6 +204,7 @@ def find_by_keywords(cards: list, query: list) -> list:
                 if (
                     query_word.lower() == "storm"
                     and field.lower() == "storm over rivayle"
+                    and "rivayle" not in (q.lower() for q in query)
                 ):
                     # special case: ignore "storm" in "storm over rivayle"
                     continue
@@ -306,6 +307,7 @@ def flavor_embed(card: dict) -> dict:
 
 def random_card(cards: list, eggsplosion: bool = False) -> dict:
     """Return the name of a random card."""
+
     if eggsplosion:
         cards = [
             card
