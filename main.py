@@ -250,7 +250,7 @@ async def randomcard(ctx):
 @bot.command(hidden=True)
 async def update(ctx):
     async with ctx.typing():
-        await card_data.update()
+        await card_data._update()
 
 
 @bot.command(hidden=True)
