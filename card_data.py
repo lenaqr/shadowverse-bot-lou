@@ -47,6 +47,7 @@ card_sets = {
     10017: "Fortune's Hand",
     10018: "Storm Over Rivayle",
     10019: "Eternal Awakening",
+    10020: "Darkness Over Vellsar",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
     70003: "Anigera DIDOON Tie-In",
