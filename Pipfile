@@ -11,6 +11,7 @@ pytest-asyncio = "*"
 [packages]
 "discord.py" = "*"
 aiohttp = "*"
+Pillow = "*"
 unitypack = {git = "https://github.com/HearthSim/UnityPack"}
 
 [requires]
