@@ -68,7 +68,7 @@ card_sets = {
     70019: "Shadowverse: Champion's Battle",
     70020: "Granblue Fantasy Tie-in",
     70021: "Battle Pass",
-    70022: "Tie-in 22",
+    70022: "Kaguya-sama: Love Is War? Tie-in",
     90000: "Token",
 }
 formats = {
