@@ -48,6 +48,8 @@ card_sets = {
     10018: "Storm Over Rivayle",
     10019: "Eternal Awakening",
     10020: "Darkness Over Vellsar",
+    10021: "Upcoming Card Set 21",
+    10022: "Upcoming Card Set 22",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
     70003: "Anigera DIDOON Tie-In",
@@ -69,6 +71,9 @@ card_sets = {
     70020: "Granblue Fantasy Tie-in",
     70021: "Battle Pass",
     70022: "Kaguya-sama: Love Is War? Tie-in",
+    70023: "Upcoming Tie-in 23",
+    70024: "Upcoming Tie-in 24",
+    70025: "Upcoming Tie-in 25",
     90000: "Token",
 }
 formats = {
