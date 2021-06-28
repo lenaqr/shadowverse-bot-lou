@@ -48,7 +48,7 @@ card_sets = {
     10018: "Storm Over Rivayle",
     10019: "Eternal Awakening",
     10020: "Darkness Over Vellsar",
-    10021: "Upcoming Card Set 21",
+    10021: "Renascent Chronicles",
     10022: "Upcoming Card Set 22",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
