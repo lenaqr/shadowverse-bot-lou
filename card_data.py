@@ -74,7 +74,7 @@ card_sets = {
     70020: "Granblue Fantasy Tie-in",
     70021: "Battle Pass",
     70022: "Kaguya-sama: Love Is War? Tie-in",
-    70023: "Upcoming Tie-in 23",
+    70023: "The Idolmaster: Cinderella Girls Tie-in",
     70024: "Upcoming Tie-in 24",
     70025: "Upcoming Tie-in 25",
     90000: "Token",
