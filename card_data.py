@@ -51,7 +51,7 @@ card_sets = {
     10021: "Renascent Chronicles",
     10022: "Dawn of Calamity",
     10023: "Omen of Storms",
-    10024: "Upcoming Card Set 24",
+    10024: "Edge of Paradise",
     10025: "Upcoming Card Set 25",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
