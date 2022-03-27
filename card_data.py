@@ -217,6 +217,13 @@ def find_by_keywords(cards: list, query: list) -> list:
                 ):
                     # special case: ignore "storm" in "storm over rivayle"
                     continue
+                if (
+                    query_word.lower() == "storm"
+                    and field.lower() == "omen of storms"
+                    and "omen" not in (q.lower() for q in query)
+                ):
+                    # special case: ignore "storm" in "omen of storms"
+                    continue
                 if query_word in (field.lower() if query_word.islower() else field):
                     word_found = True
                     break
