@@ -118,7 +118,7 @@ def effective_card_name(card: dict) -> str:
         return None
     if card["card_id"] != card["base_card_id"]:
         if card["card_set_id"] == card["base_card_set_id"]:
-            return card_name + " (Alt Leader)"
+            return card_name + " (Alt)"
         elif card["card_set_id"] == 90000:
             return card_name + " (Token)"
         else:
@@ -205,6 +205,7 @@ def find_by_keywords(cards: list, query: list) -> list:
             card["skill_disc"],
             card["evo_skill_disc"],
             "{atk}/{life}".format(atk=card["atk"], life=card["life"]),
+            "Leader" if card_name.endswith(" (Alt)") else "",
         ]
         is_match = True
         for query_word in query:
