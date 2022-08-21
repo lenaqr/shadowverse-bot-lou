@@ -166,7 +166,7 @@ async def art_gen(ctx, query: list, which: str):
     card_name = card_data.effective_card_name(result)
 
     async with ctx.typing():
-        image = await card_art.get_asset(card_id, which)
+        image = await card_art.svgdb_get(card_id, which)
 
     if image is None:
         raise CardArtError(card_id, card_name)

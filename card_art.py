@@ -85,3 +85,12 @@ async def get_asset(card_id: int, suffix: str) -> io.BytesIO:
     ret.seek(0)
 
     return ret
+
+
+async def svgdb_get(card_id: int, suffix: str) -> io.BytesIO:
+    url = f"https://svgdb.me/assets/fullart/{card_id}{suffix}.png"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            data = io.BytesIO(await response.read())
+
+    return data
