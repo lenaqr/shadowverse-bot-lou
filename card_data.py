@@ -48,6 +48,12 @@ card_sets = {
     10018: "Storm Over Rivayle",
     10019: "Eternal Awakening",
     10020: "Darkness Over Vellsar",
+    10021: "Renascent Chronicles",
+    10022: "Dawn of Calamity",
+    10023: "Omen of Storms",
+    10024: "Edge of Paradise",
+    10025: "Roar of the Godwyrm",
+    10026: "Upcoming Card Set 26",
     70001: "Prebuilt Decks 1",
     70002: "Prebuilt Decks 2",
     70003: "Anigera DIDOON Tie-In",
@@ -69,6 +75,9 @@ card_sets = {
     70020: "Granblue Fantasy Tie-in",
     70021: "Battle Pass",
     70022: "Kaguya-sama: Love Is War? Tie-in",
+    70023: "The Idolmaster: Cinderella Girls Tie-in",
+    70024: "Upcoming Tie-in 24",
+    70025: "Upcoming Tie-in 25",
     90000: "Token",
 }
 formats = {
@@ -110,7 +119,7 @@ def effective_card_name(card: dict) -> str:
         return None
     if card["card_id"] != card["base_card_id"]:
         if card["card_set_id"] == card["base_card_set_id"]:
-            return card_name + " (Alt Leader)"
+            return card_name + " (Alt)"
         elif card["card_set_id"] == 90000:
             return card_name + " (Token)"
         else:
@@ -197,6 +206,7 @@ def find_by_keywords(cards: list, query: list) -> list:
             card["skill_disc"],
             card["evo_skill_disc"],
             "{atk}/{life}".format(atk=card["atk"], life=card["life"]),
+            "Leader" if card_name.endswith(" (Alt)") else "",
         ]
         is_match = True
         for query_word in query:
@@ -208,6 +218,13 @@ def find_by_keywords(cards: list, query: list) -> list:
                     and "rivayle" not in (q.lower() for q in query)
                 ):
                     # special case: ignore "storm" in "storm over rivayle"
+                    continue
+                if (
+                    query_word.lower() == "storm"
+                    and field.lower() == "omen of storms"
+                    and "omen" not in (q.lower() for q in query)
+                ):
+                    # special case: ignore "storm" in "omen of storms"
                     continue
                 if query_word in (field.lower() if query_word.islower() else field):
                     word_found = True
