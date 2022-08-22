@@ -209,19 +209,21 @@ async def evoart(ctx, *query):
 async def sleeve(ctx, *query):
     """Display sleeve art"""
 
-    async with ctx.typing():
-        if not query:
-            image, sleeve_name = await sleeves.get_random()
-        else:
-            sleeve_id, sleeve_name = await sleeves.find_sleeve(query)
-            if not sleeve_id:
-                raise CardNotFoundError(query)
-            image = await sleeves.get_asset(sleeve_id)
+    # async with ctx.typing():
+    #     if not query:
+    #         image, sleeve_name = await sleeves.get_random()
+    #     else:
+    #         sleeve_id, sleeve_name = await sleeves.find_sleeve(query)
+    #         if not sleeve_id:
+    #             raise CardNotFoundError(query)
+    #         image = await sleeves.get_asset(sleeve_id)
 
-    if image is None:
-        raise CardArtError(sleeve_id, sleeve_name)
-    else:
-        await ctx.send(sleeve_name, file=discord.File(image, "0.png"))
+    # if image is None:
+    #     raise CardArtError(sleeve_id, sleeve_name)
+    # else:
+    #     await ctx.send(sleeve_name, file=discord.File(image, "0.png"))
+
+    await ctx.send("There is a technical issue with the sleeve command. Sorry!")
 
 
 @bot.command(aliases=["deck", "code"])
@@ -268,7 +270,7 @@ async def feedback(ctx, *, message: str):
 
     log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
     await log_channel.send(
-        f"Feedback from {ctx.author} in {ctx.guild} {ctx.channel}: ```{message}```"
+        f"<@{bot.owner}> Feedback from {ctx.author} in {ctx.guild} {ctx.channel}: ```{message}```"
     )
     await ctx.send("Feedback sent. Thank you!")
 
