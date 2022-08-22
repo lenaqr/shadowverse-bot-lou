@@ -46,7 +46,8 @@ commands.view._all_quotes = set()
 async def on_ready():
     print(f"Logged in as {bot.user}")
     if os.environ.get("DEV") is None:
-        activity = discord.Game(name=f"{command_prefix[0]}help")
+        status = os.environ.get("STATUS", f"{command_prefix[0]}help")
+        activity = discord.Game(name=status)
         await bot.change_presence(activity=activity)
 
 
