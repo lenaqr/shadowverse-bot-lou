@@ -269,8 +269,9 @@ async def feedback(ctx, *, message: str):
     """Report feedback to the bot dev"""
 
     log_channel = bot.get_channel(int(os.environ["LOG_CHANNEL"]))
+    app = bot.application_info()
     await log_channel.send(
-        f"<@{bot.owner}> Feedback from {ctx.author} in {ctx.guild} {ctx.channel}: ```{message}```"
+        f"<@{app.owner}> Feedback from {ctx.author} in {ctx.guild} {ctx.channel}: ```{message}```"
     )
     await ctx.send("Feedback sent. Thank you!")
 
