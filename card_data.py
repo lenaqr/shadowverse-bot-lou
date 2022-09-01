@@ -76,9 +76,9 @@ card_sets = {
     70021: "Battle Pass",
     70022: "Kaguya-sama: Love Is War? Tie-in",
     70023: "The Idolmaster: Cinderella Girls Tie-in",
-    70024: "Tie-in 24",
-    70025: "Tie-in 25",
-    70026: "Tie-in 26",
+    70024: "Shaman King Tie-in",
+    70025: "Umamusume: Pretty Derby Tie-in",
+    70026: "Chiikawa Tie-in",
     90000: "Token",
 }
 formats = {
