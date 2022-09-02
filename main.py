@@ -12,9 +12,13 @@ import deck_code
 
 command_prefix = os.environ["BOT_PREFIX"].split()
 
+intents = discord.Intents.default()
+intents.messages = True
+
 bot = commands.Bot(
     command_prefix=command_prefix,
     description=os.environ.get("DESCRIPTION", "Shadowverse info bot"),
+    intents=intents,
 )
 
 
