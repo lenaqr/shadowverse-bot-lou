@@ -80,6 +80,7 @@ card_sets = {
     70024: "Shaman King Tie-in",
     70025: "Umamusume: Pretty Derby Tie-in",
     70026: "Chiikawa Tie-in",
+    70027: "Tie-in 27",
     90000: "Token",
 }
 formats = {
